@@ -1,6 +1,4 @@
 
-## Installomator and swiftDialog script to run with Jamf School for macOS onboarding
-
 ## macOS App Onboarding for Jamf School: V1.0                  
                                                                              
  App deployment/onboarding process for macOS with use for Jamf School that give's visual feedback to Admin in suite situations or end users for 1:1  deployments. 
