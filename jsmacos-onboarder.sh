@@ -86,7 +86,7 @@
 #                                           #
 #          0=Local 1=Via Script             #
 # # # # # # # # # # # # # # # # # # # # # # #
-runOption=1
+runOption=0
 
 #####Swift Dialog Variables & Controls#####
 dialogPath=/usr/local/bin/dialog
