@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AppInstalls</key>
+	<array>
+		<dict>
+			<key>appIcon</key>
+			<string>/Applications/Google Chrome.app/Contents/Resources/app.icns</string>
+			<key>appLabel</key>
+			<string>googlechromepkg</string>
+			<key>appName</key>
+			<string>Google Chrome</string>
+		</dict>
+		<dict>
+			<key>appIcon</key>
+			<string>/System/Applications/QuickTime Player.app/Contents/Resources/AppIcon.icns</string>
+			<key>appLabel</key>
+			<string>vlc</string>
+			<key>appName</key>
+			<string>VLC Player</string>
+		</dict>
+	</array>
+</dict>
+</plist>
