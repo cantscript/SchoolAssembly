@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MANAGED_PREFERENCE_DOMAIN="com.ant.darlow4"
+MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder"
 
 getPref() { # $1: key, $2: default value, $3: domain
 	local key=${1:?"key required"}
@@ -44,34 +44,34 @@ echo "There are $installItemsNo items, resulting in $requiredApps Apps to be ins
 echo "-----------"
 
 ### Pre-flight varibles ###
-installApp=()
+apps=()
 appCounter=1
 indexPoint=0
 
 ### Create App Install array for Switdialog ###
 while [ $appCounter -le $requiredApps ]; do
-	installApp+=(${installArray[@]:$indexPoint:3})
+	apps+=(${installArray[@]:$indexPoint:3})
 	echo "R:$requiredApps | I: $indexPoint | Added App: $appCounter "
 	indexPoint=$(($indexPoint+3))
 	((appCounter++))
 done
-echo "The resulting array contains ${#installApp[@]} Apps to be installed"
+echo "The resulting array contains ${#apps[@]} Apps to be installed"
 
 
 ### Success / Error Message ###
 echo "-----------"
-if [ $requiredApps = ${#installApp[@]} ]; then
-	echo "SUCCESS: $requiredApps apps where read from Prefs & ${#installApp[@]} Apps have been added to Onboarder script"
+if [ $requiredApps = ${#apps[@]} ]; then
+	echo "SUCCESS: $requiredApps apps where read from Prefs & ${#apps[@]} Apps have been added to Onboarder script"
 else
-	echo "ERROR: $requiredApps apps where read from Prefs but ${#installApp[@]} Apps have been added to Onboarder script"
+	echo "ERROR: $requiredApps apps where read from Prefs but ${#apps[@]} Apps have been added to Onboarder script"
 fi
 
 if [ $installAppLogging != 0 ]; then
-	for items in "${installApp[@]}"; do
+	for items in "${apps[@]}"; do
 		echo "----------"
-		echo "Display Name: "$( echo "$items" | cut -d ':' -f2 | cut -d '"' -f1 | tr -d '\')""
-		echo "Icon Location: "$(echo "$items" | cut -d ':' -f3 | cut -d '"' -f1)""
-		echo "App Name: "$(echo "$items" | cut -d ':' -f4 | cut -d '"' -f1 | tr -d '\')""
+		echo "Icon Location: "$( echo "$items" | cut -d ':' -f2 | cut -d '"' -f1 | tr -d '\')""
+		echo "Display Name: "$(echo "$items" | cut -d ':' -f3 | cut -d '"' -f1)""
+		echo "Installomator Label: "$(echo "$items" | cut -d ':' -f4 | cut -d '"' -f1 | tr -d '\')""
 		
 	done
 fi
