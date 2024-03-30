@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder"
+MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder3"
 
 getPref() { # $1: key, $2: default value, $3: domain
 	local key=${1:?"key required"}
@@ -35,7 +35,7 @@ oldIFS=
 IFS=,
 
 ### Logic to define how many apps are to be installed ###
-echo "-> Starting..."
+echo "-> Starting...App Installs"
 echo "Converting Prefs into script Vars"
 installArray=($appList)
 installItemsNo=${#installArray[@]}
@@ -83,4 +83,78 @@ IFS=$oldIFS
 echo "----------"
 echo "<- Ending..."
 
+
+######################################
+#  Get details of Apps to Watch      #
+# from plist / profile and turn into #
+#             an array               #
+######################################
+
+
+### Dump plist key into a variable ###
+watchList=$(getPref "AppWatch")
+
+### Change IFS for workflow ###
+oldIFS=
+IFS=,
+
+### Logic to define how many apps are to be watched ###
+echo "-> Starting...App Watch Paths"
+echo "Converting Prefs into script Vars"
+watchArray=($watchList)
+watchItemsNo=${#watchArray[@]}
+let requiredWatchApps=$watchItemsNo/3
+echo "There are $watchItemsNo items, resulting in $requiredWatchApps Apps to be watched"
+echo "-----------"
+
+### Pre-flight varibles ###
+storeInstalls=()
+watchCounter=1
+indexPoint=0
+
+### Create App watch list array for Switdialog ###
+while [ $watchCounter -le $requiredWatchApps ]; do
+	storeInstalls+=(${watchArray[@]:$indexPoint:3})
+	echo "R:$requiredWatchApps | I: $indexPoint | Added App: $watchCounter "
+	indexPoint=$(($indexPoint+3))
+	((watchCounter++))
+done
+echo "The resulting array contains ${#storeInstalls[@]} Apps to be watched"
+
+
+### Success / Error Message ###
+echo "-----------"
+if [ $requiredWatchApps = ${#storeInstalls[@]} ]; then
+	echo "SUCCESS: $requiredWatchApps apps where read from Prefs & ${#storeInstalls[@]} Apps have been added to Onboarder script"
+else
+	echo "ERROR: $requiredWatchApps apps where read from Prefs but ${#storeInstalls[@]} Apps have been added to Onboarder script"
+fi
+
+if [ $installAppLogging != 0 ]; then
+	for items in "${storeInstalls[@]}"; do
+		echo "----------"
+		echo "Icon Location: "$( echo "$items" | cut -d ':' -f2 | cut -d '"' -f1 | tr -d '\')""
+		echo "App Location: "$(echo "$items" | cut -d ':' -f3 | cut -d '"' -f1)""
+		echo "Display Name: "$(echo "$items" | cut -d ':' -f4 | cut -d '"' -f1 | tr -d '\')""
+		
+	done
+fi
+
+### Return IFS to original state ###
+IFS=$oldIFS
+
+### End Process ###
+echo "----------"
+echo "<- Ending..."
+
+#appPath="/Applications/Pages.app"
+
+for masApp in "${storeInstalls[@]}"; do
+	echo "checking app location $(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)"
+	echo "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)"
+	
+	if [ -e "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)" ]; then
+		echo "App is here"
+	fi
+done
 

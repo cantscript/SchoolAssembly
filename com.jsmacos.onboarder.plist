@@ -21,5 +21,24 @@
 			<string>VLC Player</string>
 		</dict>
 	</array>
+	<key>AppWatch</key>
+	<array>
+		<dict>
+			<key>appIcon</key>
+			<string>/Applications/Keynote.app/Contents/Resources/AppIcon.icns</string>
+			<key>appLocation</key>
+			<string>/Applications/Keynote.app</string>
+			<key>appName</key>
+			<string>Keynote</string>
+		</dict>
+		<dict>
+			<key>appIcon</key>
+			<string>/Applications/Pages.app/Contents/Resources/AppIcon.icns</string>
+			<key>appLocation</key>
+			<string>/Applications/Pages.app</string>
+			<key>appName</key>
+			<string>Pages</string>
+		</dict>
+	</array>
 </dict>
 </plist>
