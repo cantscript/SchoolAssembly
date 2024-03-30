@@ -402,13 +402,7 @@ sleep 1
 ####Check for Apps already installed while Installomator was hard at work and set status####
 for masApp in "${storeInstalls[@]}"; do
 	sleep 0.5
-	###For Testing###
-	echo "This is the app we are checking if it already installed "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)""
-	######
-	if [ -e "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)" ]; then
-		###For Testing###
-		echo ""$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)" was found"
-		######
+	if [ -e "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1 | cut -c 1)" ]; then
 		echo "listitem: title: "$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: success, statustext:  Installed " >> $cmdLog
 		progressCount=$(( progressCount + 1)) 
 		echo "progress: $progressCount" >> $cmdLog
@@ -419,10 +413,7 @@ done
 ####Sets status for apps not yet installed & adds them to a new Var####
 waitInstalls=()
 for masApp in "${storeInstalls[@]}"; do
-	###For Testing####
-	echo "This app "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)" was not found"
-	########
-	if [ ! -e "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)" ]; then
+	if [ ! -e "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1 | cut -c 1)" ]; then
 		echo "listitem: title: "$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: wait, statustext:  Waiting for Installation" >> $cmdLog
 		waitInstalls+=("$masApp")
 	fi 
@@ -434,10 +425,7 @@ echo ${waitInstalls[@]}
 while [ $progressCount != $totalSteps ]; do
 	for waitApp in "${waitInstalls[@]}"; do
 		sleep 0.5
-		if [ -e "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)" ]; then
-			###For Testing####
-			echo "This app "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)" was found"
-			########
+		if [ -e "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1 | cut -c 1)" ]; then
 			echo "listitem: title: "$(echo "$waitApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: success, statustext:  Installed " >> $cmdLog
 			progressCount=$(( progressCount + 1)) 
 			echo "progress: $progressCount" >> $cmdLog
@@ -450,11 +438,8 @@ while [ $progressCount != $totalSteps ]; do
 			waitInstalls=("${tempList[@]}")
 			unset tempList 
 			echo "waitInstalls now contains ${waitInstalls[@]}"
-		else [ ! -e "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)" ];
-			###For Testing####
-			echo "This app "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)" was not found"
-			########
-			echo ""$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)" still waiting..."
+		else [ ! -e "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1 | cut -c 1)" ];
+			echo ""$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1 | cut -c 1)" still waiting..."
 		fi
 	done
 	####Changes progress text once all apps are installed and waiting for the final while loop logic####

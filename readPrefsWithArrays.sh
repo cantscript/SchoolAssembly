@@ -147,14 +147,5 @@ IFS=$oldIFS
 echo "----------"
 echo "<- Ending..."
 
-#appPath="/Applications/Pages.app"
 
-for masApp in "${storeInstalls[@]}"; do
-	echo "checking app location $(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)"
-	echo "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)"
-	
-	if [ -e "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)" ]; then
-		echo "App is here"
-	fi
-done
 
