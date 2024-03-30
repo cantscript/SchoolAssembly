@@ -88,6 +88,10 @@
 # # # # # # # # # # # # # # # # # # # # # # #
 runOption=0
 
+### Logging Option ###
+### 0=Standard 1= Verbose ###
+installAppLogging=0
+
 #####Swift Dialog Variables & Controls#####
 dialogPath=/usr/local/bin/dialog
 cmdLog=/var/tmp/dialog.log
@@ -98,7 +102,7 @@ installoOptions="NOTIFY=silent BLOCKING_PROCESS_ACTION=ignore INSTALL=force IGNO
 
 ### Preferences Reader Func ###
 
-MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder2"
+MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder3"
 
 getPref() { # $1: key, $2: default value, $3: domain
 	local key=${1:?"key required"}
@@ -116,33 +120,12 @@ getPref() { # $1: key, $2: default value, $3: domain
 }
 
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-#                              Automator Labels                                  #
-#                             Format needs to be:-                               #
-#                            1) Installomator label                              #
-#                        2) Display Text (Escape spaces with \)                  #
-#                        3) Icon Location (Escape spaces with \)                 #
-#                                                                                #
-# Example: googlechromepkg,Google\ Chrome,/Users/ladmin/Desktop/Chrome\ Icon.png #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-
-#apps=(googlechromepkg,Google\ Chrome,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Chrome\ Icon.png
-#	microsoftexcel,Excel,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Excel\ Icon.png
-#	microsoftword,Word,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Word\ Icon.png
-#	microsoftoutlook,Outlook,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Outlook\ Icon.png
-#	microsoftteams,Teams,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Teams\ Icon.png
-#	microsoftonedrive,One\ Drive,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/OneDrive\ Icon.png
-#)
-
 ######################################
 #  Get details of Apps to Install    #
 # from plist / profile and turn into #
 #             an array               #
 ######################################
 
-### Logging Option ###
-### 0=Standard 1= Verbose ###
-installAppLogging=0
 
 ### Dump plist key into a variable ###
 appList=$(getPref "AppInstalls")
@@ -152,7 +135,7 @@ oldIFS=
 IFS=,
 
 ### Logic to define how many apps are to be installed ###
-echo "-> Starting..."
+echo "-> Starting...App Installs"
 echo "Converting Prefs into script Vars"
 installArray=($appList)
 installItemsNo=${#installArray[@]}
@@ -210,18 +193,82 @@ echo "<- Ending..."
 # Example: Keynote,/Applications/Keynote.app,/Users/ladmin/Desktop/Keynote\ Icon.png #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-storeInstalls=(Keynote,/Applications/Keynote.app,/Applications/Keynote.app/Contents/Resources/AppIcon.icns
+#storeInstalls=(Keynote,/Applications/Keynote.app,/Applications/Keynote.app/Contents/Resources/AppIcon.icns
 	#Numbers,/Applications/Numbers.app,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Numbers\ Icon.png
 	#Pages,/Applications/Pages.app,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Pages\ Icon.png
 	#Swift\ Playgrounds,/Applications/Playgrounds.app,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Playgrounds\ Icon.png
 	#Jamf\ Student,/Applications/Jamf\ Student.app,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Student\ Icon.png
-)
+	#)
+
+######################################
+#  Get details of Apps to Watch      #
+# from plist / profile and turn into #
+#             an array               #
+######################################
+
+
+### Dump plist key into a variable ###
+watchList=$(getPref "AppWatch")
+
+### Change IFS for workflow ###
+oldIFS=
+IFS=,
+
+### Logic to define how many apps are to be watched ###
+echo "-> Starting...App Watch Paths"
+echo "Converting Prefs into script Vars"
+watchArray=($watchList)
+watchItemsNo=${#watchArray[@]}
+let requiredWatchApps=$watchItemsNo/3
+echo "There are $watchItemsNo items, resulting in $requiredWatchApps Apps to be watched"
+echo "-----------"
+
+### Pre-flight varibles ###
+storeInstalls=()
+watchCounter=1
+indexPoint=0
+
+### Create App watch list array for Switdialog ###
+while [ $watchCounter -le $requiredWatchApps ]; do
+	storeInstalls+=(${watchArray[@]:$indexPoint:3})
+	echo "R:$requiredWatchApps | I: $indexPoint | Added App: $watchCounter "
+	indexPoint=$(($indexPoint+3))
+	((watchCounter++))
+done
+echo "The resulting array contains ${#storeInstalls[@]} Apps to be watched"
+
+
+### Success / Error Message ###
+echo "-----------"
+if [ $requiredWatchApps = ${#storeInstalls[@]} ]; then
+	echo "SUCCESS: $requiredWatchApps apps where read from Prefs & ${#storeInstalls[@]} Apps have been added to Onboarder script"
+else
+	echo "ERROR: $requiredWatchApps apps where read from Prefs but ${#storeInstalls[@]} Apps have been added to Onboarder script"
+fi
+
+if [ $installAppLogging != 0 ]; then
+	for items in "${storeInstalls[@]}"; do
+		echo "----------"
+		echo "Icon Location: "$( echo "$items" | cut -d ':' -f2 | cut -d '"' -f1 | tr -d '\')""
+		echo "App Location: "$(echo "$items" | cut -d ':' -f3 | cut -d '"' -f1)""
+		echo "Display Name: "$(echo "$items" | cut -d ':' -f4 | cut -d '"' -f1 | tr -d '\')""
+		
+	done
+fi
+
+### Return IFS to original state ###
+IFS=$oldIFS
+
+### End Process ###
+echo "----------"
+echo "<- Ending..."
+
 
 ####Personalise Window Text with logged-in user or computer name####
 windowGreeting=""
 currentUser="$(stat -f "%Su" /dev/console | cut -d '.' -f1)" #option 0
 compName="$(hostname -f | sed -e 's/^[^.]*\.//')"            #option 1
-personalOption=1
+personalOption=0
 if [ $personalOption = 0 ]; then
 	windowGreeting=$currentUser
 else
@@ -348,15 +395,21 @@ echo "icon: /System/Applications/App Store.app/Contents/Resources/AppIcon.icns" 
 
 for masApp in "${storeInstalls[@]}"; do
 	sleep 0.5
-	echo "listitem: add, title: "$(echo "$masApp" | cut -d ',' -f1)", statustext: checking, status: wait, icon: "$(echo "$masApp" | cut -d ',' -f3)"" >> $cmdLog
+	echo "listitem: add, title: "$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", statustext: checking, status: wait, icon: "$(echo "$masApp" | cut -d ':' -f2 | cut -d '"' -f1)"" >> $cmdLog
 done 
 sleep 1
 
 ####Check for Apps already installed while Installomator was hard at work and set status####
 for masApp in "${storeInstalls[@]}"; do
 	sleep 0.5
-	if [ -e "$(echo "$masApp" | cut -d ',' -f2)" ]; then
-		echo "listitem: title: "$(echo "$masApp" | cut -d ',' -f1)", status: success, statustext:  Installed " >> $cmdLog
+	###For Testing###
+	echo "This is the app we are checking if it already installed "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)""
+	######
+	if [ -e "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)" ]; then
+		###For Testing###
+		echo ""$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)" was found"
+		######
+		echo "listitem: title: "$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: success, statustext:  Installed " >> $cmdLog
 		progressCount=$(( progressCount + 1)) 
 		echo "progress: $progressCount" >> $cmdLog
 		sleep 1
@@ -366,8 +419,11 @@ done
 ####Sets status for apps not yet installed & adds them to a new Var####
 waitInstalls=()
 for masApp in "${storeInstalls[@]}"; do
-	if [ ! -e "$(echo "$masApp" | cut -d ',' -f2)" ]; then
-		echo "listitem: title: "$(echo "$masApp" | cut -d ',' -f1)", status: wait, statustext:  Waiting for Installation" >> $cmdLog
+	###For Testing####
+	echo "This app "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)" was not found"
+	########
+	if [ ! -e "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)" ]; then
+		echo "listitem: title: "$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: wait, statustext:  Waiting for Installation" >> $cmdLog
 		waitInstalls+=("$masApp")
 	fi 
 done
@@ -378,8 +434,11 @@ echo ${waitInstalls[@]}
 while [ $progressCount != $totalSteps ]; do
 	for waitApp in "${waitInstalls[@]}"; do
 		sleep 0.5
-		if [ -e "$(echo "$waitApp" | cut -d ',' -f2)" ]; then
-			echo "listitem: title: "$(echo "$waitApp" | cut -d ',' -f1)", status: success, statustext:  Installed " >> $cmdLog
+		if [ -e "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)" ]; then
+			###For Testing####
+			echo "This app "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)" was found"
+			########
+			echo "listitem: title: "$(echo "$waitApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: success, statustext:  Installed " >> $cmdLog
 			progressCount=$(( progressCount + 1)) 
 			echo "progress: $progressCount" >> $cmdLog
 			####Remove installed app from the list####
@@ -391,8 +450,11 @@ while [ $progressCount != $totalSteps ]; do
 			waitInstalls=("${tempList[@]}")
 			unset tempList 
 			echo "waitInstalls now contains ${waitInstalls[@]}"
-		else [ ! -e "$(echo "$waitApp" | cut -d ',' -f2)" ];
-			echo ""$(echo "$waitApp" | cut -d ',' -f2)" still waiting..."
+		else [ ! -e "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)" ];
+			###For Testing####
+			echo "This app "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)" was not found"
+			########
+			echo ""$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)" still waiting..."
 		fi
 	done
 	####Changes progress text once all apps are installed and waiting for the final while loop logic####
