@@ -40,5 +40,11 @@
 			<string>Pages</string>
 		</dict>
 	</array>
+	<key>appLogging</key>
+	<false/>
+	<key>runLocal</key>
+	<true/>
+	<key>userGreeting</key>
+	<true/>
 </dict>
 </plist>

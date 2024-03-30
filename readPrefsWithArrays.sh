@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder3"
+MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder4"
 
 getPref() { # $1: key, $2: default value, $3: domain
 	local key=${1:?"key required"}
@@ -147,5 +147,12 @@ IFS=$oldIFS
 echo "----------"
 echo "<- Ending..."
 
+runOptions=$(getPref "runLocal")
+echo $runOptions
 
 
+if [ $runOptions = true ]; then
+	echo "It is true!"
+else
+	echo "Is is false!"
+fi
