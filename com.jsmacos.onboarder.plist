@@ -42,6 +42,12 @@
 	</array>
 	<key>appLogging</key>
 	<false/>
+	<key>completeMessage</key>
+	<string>Go And Be Awesome! Thanks! IT</string>
+	<key>completeTitle</key>
+	<string>Your Mac is ready to go</string>
+	<key>mainMessage</key>
+	<string>\n**Hello you _awesome_ person!** \n\nWe need to install some apps for you, this might take a while. Grab a coffee while you wait.</string>
 	<key>runLocal</key>
 	<true/>
 	<key>userGreeting</key>

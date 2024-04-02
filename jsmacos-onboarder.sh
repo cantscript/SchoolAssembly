@@ -76,7 +76,7 @@
 
 ### Preferences Reader Func ###
 
-MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder4"
+MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder5"
 
 getPref() { # $1: key, $2: default value, $3: domain
 	local key=${1:?"key required"}
@@ -254,11 +254,12 @@ fi
 
 ####Main Window Text Options###
 dialogTitle="Let's build $windowGreeting's Mac"
-dialogMessage="\n**Hello you _awesome_ person!** \n\nWe need to install some apps for you, this might take a while. Grab a coffee while you wait."
+dialogMessage=$(getPref "mainMessage" "Lets install some apps on your device! This might take a while....")
+
 
 ####Complete Window Text Options###
-endTitle="Your Mac is ready to go"
-endMessage="Go And Be Awesome! Thanks! IT"
+endTitle=$(getPref "completeTitle" "Complete")
+endMessage=$(getPref "completeMessage" "Your device is now ready. Go be awesome!")
 
 ################################################################################
 #                                                                              #
@@ -456,7 +457,7 @@ sleep 0.1
 ################################################################################
 
 ####All Done Window####
-$dialogPath --mini --title "$endTitle" --message "$endTitle" --alignment "center" --icon "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/ToolbarFavoritesIcon.icns" --button1text "OK" --position "center"
+$dialogPath --mini --title "$endTitle" --message "$endMessage" --alignment "center" --icon "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/ToolbarFavoritesIcon.icns" --button1text "OK" --position "center"
 
 ####Kill Caffeinate####
 kill $caffeinatepid
