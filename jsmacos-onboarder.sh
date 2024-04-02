@@ -89,7 +89,7 @@ echo "" >> $jsOnboarderLog
 
 ### Preferences Reader Func ###
 
-MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder5"
+MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder"
 
 getPref() { # $1: key, $2: default value, $3: domain
 	local key=${1:?"key required"}
