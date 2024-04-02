@@ -70,39 +70,13 @@
 
 ################################################################################
 #                                                                              #
-#                         Variables - Admin Defined                            #
+#                Variables - Set by Configuration Profile                      #
 #                                                                              #
 ################################################################################
 
-# # # # # # # # # # # # # # # # # # # # # # #
-#  Option to run local or through script.   #
-#  Local uses Sudo, needs Password and      #
-#  disables "full-screen blur".             #
-#                                           #
-#  If you run the script with option '1'    #
-#  locally (ie without the password) All    #
-#  Installomator installs will error due to #
-#  needing to be run as root.               #
-#                                           #
-#          0=Local 1=Via Script             #
-# # # # # # # # # # # # # # # # # # # # # # #
-runOption=0
-
-### Logging Option ###
-### 0=Standard 1= Verbose ###
-installAppLogging=0
-
-#####Swift Dialog Variables & Controls#####
-dialogPath=/usr/local/bin/dialog
-cmdLog=/var/tmp/dialog.log
-
-####Installomator Variables & Controls####
-installoPath=/usr/local/Installomator/Installomator.sh
-installoOptions="NOTIFY=silent BLOCKING_PROCESS_ACTION=ignore INSTALL=force IGNORE_APP_STORE_APPS=yes LOGGING=REQ"
-
 ### Preferences Reader Func ###
 
-MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder3"
+MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder4"
 
 getPref() { # $1: key, $2: default value, $3: domain
 	local key=${1:?"key required"}
@@ -118,6 +92,26 @@ getPref() { # $1: key, $2: default value, $3: domain
 		echo $defaultValue
 	fi
 }
+
+
+# # # # # # # # # # # # # # # # # # # # # # #
+#  Option to run local or through script.   #
+#  Local uses Sudo, needs Password and      #
+#  disables "full-screen blur".             #
+#                                           #
+#  If you run the script with "false"       #
+#  locally (ie without the password) All    #
+#  Installomator installs will error due to #
+#  needing to be run as root.               #
+#                                           #
+#       true=Local false=Via Script         #
+# # # # # # # # # # # # # # # # # # # # # # #
+runOption=$(getPref "runLocal" "false")
+
+### Logging Option ###
+### false= Standard true= Verbose ###
+installAppLogging=$(getPref "appLogging" "false")
+
 
 
 ######################################
@@ -166,7 +160,7 @@ else
 	echo "ERROR: $requiredApps apps where read from Prefs but ${#apps[@]} Apps have been added to Onboarder script"
 fi
 
-if [ $installAppLogging != 0 ]; then
+if [[  $installAppLogging == "true" ]]; then
 	for items in "${apps[@]}"; do
 		echo "----------"
 		echo "Icon Location: "$( echo "$items" | cut -d ':' -f2 | cut -d '"' -f1 | tr -d '\')""
@@ -182,23 +176,6 @@ IFS=$oldIFS
 ### End Process ###
 echo "----------"
 echo "<- Ending..."
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-#                              Monitor App Store Installs                            #
-#                                Format needs to be:-                                #
-#                 1) Name of App (Display text can be anything you like)             #
-#                       2) Install Location (Escape spaces with \)                   #
-#                           3) Icon Location (Escape spaces with \)                  #
-#                                                                                    #
-# Example: Keynote,/Applications/Keynote.app,/Users/ladmin/Desktop/Keynote\ Icon.png #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-#storeInstalls=(Keynote,/Applications/Keynote.app,/Applications/Keynote.app/Contents/Resources/AppIcon.icns
-	#Numbers,/Applications/Numbers.app,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Numbers\ Icon.png
-	#Pages,/Applications/Pages.app,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Pages\ Icon.png
-	#Swift\ Playgrounds,/Applications/Playgrounds.app,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Playgrounds\ Icon.png
-	#Jamf\ Student,/Applications/Jamf\ Student.app,/Library/Application\ Support/macOS\ App\ Onboarder/App\ Icons/Student\ Icon.png
-	#)
 
 ######################################
 #  Get details of Apps to Watch      #
@@ -246,7 +223,7 @@ else
 	echo "ERROR: $requiredWatchApps apps where read from Prefs but ${#storeInstalls[@]} Apps have been added to Onboarder script"
 fi
 
-if [ $installAppLogging != 0 ]; then
+if [[  $installAppLogging == "true" ]]; then
 	for items in "${storeInstalls[@]}"; do
 		echo "----------"
 		echo "Icon Location: "$( echo "$items" | cut -d ':' -f2 | cut -d '"' -f1 | tr -d '\')""
@@ -266,10 +243,10 @@ echo "<- Ending..."
 
 ####Personalise Window Text with logged-in user or computer name####
 windowGreeting=""
-currentUser="$(stat -f "%Su" /dev/console | cut -d '.' -f1)" #option 0
-compName="$(hostname -f | sed -e 's/^[^.]*\.//')"            #option 1
-personalOption=0
-if [ $personalOption = 0 ]; then
+currentUser="$(stat -f "%Su" /dev/console | cut -d '.' -f1)" #true
+compName="$(hostname -f | sed -e 's/^[^.]*\.//')"            #false
+personalOption=$(getPref "userGreeting" "false")
+if [[ $personalOption = "true" ]]; then
 	windowGreeting=$currentUser
 else
 	windowGreeting=$compName
@@ -294,6 +271,14 @@ endMessage="Go And Be Awesome! Thanks! IT"
 #                         Pre-flight Checks and Options                        #
 #                                                                              #
 ################################################################################
+
+#####Swift Dialog Variables & Controls#####
+dialogPath=/usr/local/bin/dialog
+cmdLog=/var/tmp/dialog.log
+
+####Installomator Variables & Controls####
+installoPath=/usr/local/Installomator/Installomator.sh
+installoOptions="NOTIFY=silent BLOCKING_PROCESS_ACTION=ignore INSTALL=force IGNORE_APP_STORE_APPS=yes LOGGING=REQ"
 
 ####Check User is Logged In by checking for Finder & Dock process####
 until pgrep -q -x "Finder" && pgrep -q -x "Dock"; do
@@ -337,7 +322,7 @@ main_window(){
 }
 
 ####Start swiftDialog Window depending on local or script####
-if [ $runOption = 0 ]; then
+if [[ $runOption == "true" ]]; then
 	main_window_local &
 else
 	main_window  &
@@ -361,7 +346,7 @@ for app in "${apps[@]}"; do
 	sleep 0.5
 	echo "listitem: title: "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)", status: pending, statustext: Installing" >> $cmdLog
 	echo "progresstext: Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)" in Progress" >> $cmdLog
-	if [ $runOption = 0 ]; then
+	if [[ $runOption == "true" ]]; then
 		runInstallo="$(sudo $installoPath "$(echo "$app" | cut -d ':' -f4 | cut -d '"' -f1)" $installoOptions)"
 	else
 		runInstallo="$($installoPath "$(echo "$app" | cut -d ':' -f4 | cut -d '"' -f1)" $installoOptions)"
