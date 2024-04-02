@@ -290,9 +290,17 @@ done
 /usr/bin/caffeinate -d -i -m -u &
 caffeinatepid=$!
 
-###Install Dialog###
-$installoPath dialog $installoOptions
-sleep 3
+###Install Dialog, if required###
+if [[ -f $dialogPath ]]; then
+	echo "swiftDialog already installed....progressing"
+else
+	echo "swiftDialog required....starting download"
+	$installoPath dialog $installoOptions
+	echo "-----------"
+	echo "swiftDialog installed"
+	echo "----------"
+	sleep 3
+fi
 
 #####Installomator Installs####
 # Get the number of steps required for the progress bar
