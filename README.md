@@ -1,20 +1,49 @@
 
-## macOS App Onboarding for Jamf School: V1.0                  
-                                                                             
- App deployment/onboarding process for macOS with use for Jamf School that give's visual feedback to Admin in suite situations or end users for 1:1  deployments. 
- 
- This workflow utilises
- - [Installomator](https://github.com/Installomator/Installomator)
- - [swiftDialog](https://github.com/bartreardon/swiftDialog)                
+## macOS Onboarding Tool for Jamf School: V2.0                  
 
-Both of which need to be installed on the target devices prior to running.
-For use with Jamf School this could be
-1) By scripting their installation before running this script                
-2) Deploying via a package and then running this script 
-3) By creating a custom package which first installs Installomator & swiftDialog and then runs this script as a postinstall script
+::*Newly updated project which now uses a Configuration Profile to control the script!*::
+Admins no longer need to edit anything in the script for easier manipulation and ongoing maintenance 
 
-Icons referenced in this script also need to be on the device prior to running this script. This should be done for Jamf School via a custom package.
-If you use option 3 above icons can be included in the 'onboarder' package which then has everything needed for this workflow and can be deployed as a single package.
+App deployment/onboarding tool for macOS design for use Jamf School. Onboarder give's visual feedback to Admins or End User while installing applications on deployment of device
+
+---
+
+### macOS Onboarding Tool Dependancies
+
+This workflow utilises
+- [Installomator](https://github.com/Installomator/Installomator)
+- [swiftDialog](https://github.com/bartreardon/swiftDialog)
+
+Installomator must be installed on the target device(s) prior to running.
+swiftDialog will be installed via Installomator in script logic, if not already installed.
+
+Use one of the following to deliver Installomator to target device(s) with Jamf School
+1) By scripting installation before running macOS Onboarder Tool                
+2) Deploying via a package and then running macOS Onboarder Tool
+
+
+_**App Icons**_
+
+App icons referenced by a configuration profile need to be on the device prior to running this tool. If you deploy Installomator by a package you could create a custom package which includes both Installomator and the required app icons and deploy that you your target device(s)
+
+V2.0 does not allow for images references to be from the internet. 
+
+*This is a current limitation of the macOS Onboarder Tool logic in this version. I hope to fix this in a future version*
+
+---
+
+### Configuration Profile Manifest
+
+---
+
+### User Guide
+
+Please use the wiki to find full usage guide
+
+---
+
+### Thanks!
 
 This script has been heavily inspired by *"Progress 1st swiftDialog.sh"* & *"Installomator 1st Auto-install DEPNotify.sh"* by
-[Søren Theilgaard](https://github.com/Theile)               
+[Søren Theilgaard](https://github.com/Theile) 
+With help from [scriptingosx](https://scriptingosx.com/) with reading profile keys in bash scripts
