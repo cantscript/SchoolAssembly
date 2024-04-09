@@ -32,29 +32,7 @@
 
 ################################################################################
 #                                                                              #
-#                  macOS App Onboarding for Jamf School: V1.0                  #
-#                                                                              #
-#  App deployment/onboarding process for macOS with use for Jamf School that   #
-#  give's visual feedback to Admin in suite situations or end users for 1:1    #
-#  deployments.                                                                #
-#                                                                              #
-#  This workflow utilises                                                      #
-#  - Installomator - https://github.com/Installomator/Installomator            #
-#  - Swiftdialog - https://github.com/bartreardon/swiftDialog                  #
-#                                                                              #
-#  Both of which need to be installed on the target devices prior to running.  #
-#  For use with Jamf School this could be                                      #
-#  1) By scripting their installation before running this script               #
-#  2) Deploying via a package and then running this script                     #
-#  3) By creating a custom package which first installs Installomator &        #
-#	  Swiftdialog and then runs this script as a postinstall script            #
-#                                                                              #
-#  Icons referenced in this script also need to be on the device prior to      #
-#  running this script. This should be done for Jamf School via a custom       #
-#  package.                                                                    #
-#  If you use option 3 above icons can be included in the 'onboarder' package  #
-#  which then has everything needed for this workflow and can be deployed as   #
-#  a single package.                                                           #
+#                  macOS App Onboarding for Jamf School: V2.0                  #
 #                                                                              #
 #  This script has been heavily inspired by "Progress 1st swiftDialog.sh" &    #
 #  "Installomator 1st Auto-install DEPNotify.sh" by                            #
@@ -71,17 +49,23 @@
 dialogPath=/usr/local/bin/dialog
 cmdLog=/var/tmp/dialog.log
 
-################################################################################
-#                                                                              #
-#                Variables - Set by Configuration Profile                      #
-#                                                                              #
-################################################################################
+####Installomator Variables & Controls####
+installoPath=/usr/local/Installomator/Installomator.sh
+installoOptions="NOTIFY=silent BLOCKING_PROCESS_ACTION=ignore INSTALL=force IGNORE_APP_STORE_APPS=yes LOGGING=REQ"
 
+####Onboarder Logs####
 jsOnboarderLog=/var/tmp/jsmacOSOnboarder.log
 
 if [ -f $jsOnboarderLog ]; then
 	rm $jsOnboarderLog
 fi
+
+
+################################################################################
+#                                                                              #
+#                    Read Profile Functions & Profile Check                    #
+#                                                                              #
+################################################################################
 
 echo "For detailed Installomator logs: /private/var/log/Installomator.log" >> $jsOnboarderLog
 echo "For detailed swiftDialog control logs: /var/tmp/dialog.log" >> $jsOnboarderLog
@@ -90,7 +74,6 @@ echo "################################" >> $jsOnboarderLog
 echo "################################" >> $jsOnboarderLog
 echo "" >> $jsOnboarderLog
 
-### Preferences Reader Func ###
 
 MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder"
 
@@ -134,31 +117,15 @@ else
 fi
 
 
-# # # # # # # # # # # # # # # # # # # # # # #
-#  Option to run local or through script.   #
-#  Local uses Sudo, needs Password and      #
-#  disables "full-screen blur".             #
-#                                           #
-#  If you run the script with "false"       #
-#  locally (ie without the password) All    #
-#  Installomator installs will error due to #
-#  needing to be run as root.               #
-#                                           #
-#       true=Local false=Via Script         #
-# # # # # # # # # # # # # # # # # # # # # # #
-runOption=$(getPref "runLocal" "false")
+################################################################################
+#                                                                              #
+#  Get details of Apps to install via installomator from profile into array    #
+#                                                                              #
+################################################################################
 
 ### Logging Option ###
 ### false= Standard true= Verbose ###
 installAppLogging=$(getPref "appLogging" "false")
-
-
-
-######################################
-#  Get details of Apps to Install    #
-# from plist / profile and turn into #
-#             an array               #
-######################################
 
 
 ### Dump plist key into a variable ###
@@ -232,12 +199,11 @@ echo "################################" >> $jsOnboarderLog
 echo "################################" >> $jsOnboarderLog
 echo "" >> $jsOnboarderLog
 
-######################################
-#  Get details of Apps to Watch      #
-# from plist / profile and turn into #
-#             an array               #
-######################################
-
+################################################################################
+#                                                                              #
+#          Get details of watch paths for apps from profile into array         #
+#                                                                              #
+################################################################################
 
 ### Dump plist key into a variable ###
 watchList=$(getPref "AppWatch")
@@ -310,6 +276,15 @@ echo "################################" >> $jsOnboarderLog
 echo "################################" >> $jsOnboarderLog
 echo "" >> $jsOnboarderLog
 
+################################################################################
+#                                                                              #
+#                        Other managed preferance keys                         #
+#                                                                              #
+################################################################################
+
+runOption=$(getPref "runLocal" "false") #true = local, false = via script (run as root)
+
+
 ####Personalise Window Text with logged-in user or computer name####
 windowGreeting=""
 currentUser="$(stat -f "%Su" /dev/console | cut -d '.' -f1)" #true
@@ -334,11 +309,7 @@ echo "Converted prefs to script varibles" >> $jsOnboarderLog
 echo "Continuing...." >> $jsOnboarderLog
 echo "" >> $jsOnboarderLog
 
-################################################################################
-#                                                                              #
-#                 Script Starts Here - Do Not Edit Below                       #
-#                                                                              #
-################################################################################
+
 
 ################################################################################
 #                                                                              #
@@ -346,10 +317,6 @@ echo "" >> $jsOnboarderLog
 #                                                                              #
 ################################################################################
 
-
-####Installomator Variables & Controls####
-installoPath=/usr/local/Installomator/Installomator.sh
-installoOptions="NOTIFY=silent BLOCKING_PROCESS_ACTION=ignore INSTALL=force IGNORE_APP_STORE_APPS=yes LOGGING=REQ"
 
 ####Check User is Logged In by checking for Finder & Dock process####
 until pgrep -q -x "Finder" && pgrep -q -x "Dock"; do
@@ -366,7 +333,6 @@ echo "" >> $jsOnboarderLog
 caffeinatepid=$!
 
 ###Install Dialog, if required###
-	
 echo "Checking swiftDialog status...." >> $jsOnboarderLog
 if [[ -f $dialogPath ]]; then
 	echo "swiftDialog already installed....progressing" >> $jsOnboarderLog
@@ -379,30 +345,29 @@ else
 	sleep 3
 fi
 
+################################################################################
+#                                                                              #
+#                   Start swiftDialog & Installomator Process                  #
+#                                                                              #
+################################################################################
+	
 #####Installomator Installs####
 # Get the number of steps required for the progress bar
 progressSteps1=${#apps[@]}
-
+	
 ####App Store Installs####
 # Get the number of steps required for the progress bar
 progressSteps2=${#storeInstalls[@]}
-
+	
 ####Total Steps Required####
 totalSteps=$(($progressSteps1 + $progressSteps2))
-
+	
 echo "" >> $jsOnboarderLog
 echo "There will be a total of $totalSteps steps to complete this macOS onboarding experience" >> $jsOnboarderLog
 echo "" >> $jsOnboarderLog
 echo "################################" >> $jsOnboarderLog
 echo "################################" >> $jsOnboarderLog
 echo "" >> $jsOnboarderLog
-
-
-################################################################################
-#                                                                              #
-#                   Start swiftDialog & Installomator Process                  #
-#                                                                              #
-################################################################################
 
 echo "Pre-flight stage complete. Starting swiftDialog window....." >> $jsOnboarderLog
 echo "" >> $jsOnboarderLog
