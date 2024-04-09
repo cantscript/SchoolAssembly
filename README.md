@@ -46,4 +46,5 @@ Please use the wiki to find full usage guide
 
 This script has been heavily inspired by *"Progress 1st swiftDialog.sh"* & *"Installomator 1st Auto-install DEPNotify.sh"* by
 [Søren Theilgaard](https://github.com/Theile)
+
 With help from [scriptingosx](https://scriptingosx.com/) with reading profile keys in bash scripts
