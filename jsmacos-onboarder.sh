@@ -67,6 +67,9 @@
 #  without any support                                                         #
 ################################################################################
 
+#####Swift Dialog Variables & Controls#####
+dialogPath=/usr/local/bin/dialog
+cmdLog=/var/tmp/dialog.log
 
 ################################################################################
 #                                                                              #
@@ -105,6 +108,30 @@ getPref() { # $1: key, $2: default value, $3: domain
 		echo $defaultValue
 	fi
 }
+
+getPrefIsManaged() { # $1: key, $2: domain
+	local key=${1:?"key required"}
+	local domain=${2:-"$MANAGED_PREFERENCE_DOMAIN"}
+	
+	osascript -l JavaScript -e "$.NSUserDefaults.alloc.initWithSuiteName('$domain').objectIsForcedForKey('$key')"
+}
+
+echo "Checking configuration is present" >> $jsOnboarderLog
+
+###Check if pref is managed###
+configPresent=$(getPrefIsManaged "AppInstalls")
+if [[ $configPresent = false ]]; then
+	$dialogPath --mini --title "Error" --message "No Configuration Profile Installed. \nPlease install Configuration before proceeding. \n\n Contact IT for help" --alignment "center" --icon "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AlertStopIcon.icns" --button1text "Quit" --position "center"
+	echo "Configuration is not present. Please make sure you have installed configuration profile or populated the pref domain com.jsmacos.onboarder" >> $jsOnboarderLog
+	echo "Qutting...." >> $jsOnboarderLog
+	exit 
+else
+	echo "Configuration found, continuing...." >> $jsOnboarderLog
+	echo "" >> $jsOnboarderLog
+	echo "################################" >> $jsOnboarderLog
+	echo "################################" >> $jsOnboarderLog
+	echo "" >> $jsOnboarderLog
+fi
 
 
 # # # # # # # # # # # # # # # # # # # # # # #
@@ -319,9 +346,6 @@ echo "" >> $jsOnboarderLog
 #                                                                              #
 ################################################################################
 
-#####Swift Dialog Variables & Controls#####
-dialogPath=/usr/local/bin/dialog
-cmdLog=/var/tmp/dialog.log
 
 ####Installomator Variables & Controls####
 installoPath=/usr/local/Installomator/Installomator.sh
