@@ -1,7 +1,7 @@
 
 ## macOS Onboarding Tool for Jamf School: V2.0                  
 
-::*Newly updated project which now uses a Configuration Profile to control the script!*::
+**Newly updated project which now uses a Configuration Profile to control the script!**
 Admins no longer need to edit anything in the script for easier manipulation and ongoing maintenance 
 
 App deployment/onboarding tool for macOS design for use Jamf School. Onboarder give's visual feedback to Admins or End User while installing applications on deployment of device
@@ -26,7 +26,7 @@ _**App Icons**_
 
 App icons referenced by a configuration profile need to be on the device prior to running this tool. If you deploy Installomator by a package you could create a custom package which includes both Installomator and the required app icons and deploy that you your target device(s)
 
-**V2.0 does not allow for images references to be from the internet.** 
+**V2.0 does not allow for images references to be from the internet.** \
 *(This is a current limitation of the macOS Onboarder Tool logic in this version. I hope to fix this in a future version)*
 
 ---
