@@ -26,19 +26,47 @@ _**App Icons**_
 
 App icons referenced by a configuration profile need to be on the device prior to running this tool. If you deploy Installomator by a package you could create a custom package which includes both Installomator and the required app icons and deploy that you your target device(s)
 
-V2.0 does not allow for images references to be from the internet. 
-
-*This is a current limitation of the macOS Onboarder Tool logic in this version. I hope to fix this in a future version*
+**V2.0 does not allow for images references to be from the internet.** 
+*(This is a current limitation of the macOS Onboarder Tool logic in this version. I hope to fix this in a future version)*
 
 ---
 
+### Deployment (Quick Guide)
+
+To use the macOS Onboarder tool follow the steps below
+* Install [Installomator](https://github.com/Installomator/Installomator) on the target device(s) via Jamf School prior to using the tool
+* Package any icon images and deploy to the target device(s) via Jamf School prior to using the tool
+* Create a configuration profile to control the macOS Onboarder tool, there is an [Example Configuration Profile](https://github.com/darlow86/JSmacOS-Onboarder/blob/add-plist/Example%20JSmacOS%20Onboarder%20Profile.mobileconfig) available
+* Upload the configuration profile into Jamf School and deploy to target device(s)
+* Copy the [jsmacOS-onboarder script](https://github.com/darlow86/JSmacOS-Onboarder/blob/add-plist/jsmacos-onboarder.sh) into Jamf School
+* Scope and deploy to target device(s)
+* macOS Onboarder tool will run on target device(s), installing swiftDialog if required
+
+If there is no user logged into the device the tool will wait until, checking every 5 seconds, until there is a user logged in before running
+
+If there is no configuration profile installed a notification will be displayed onscreen and the tool will exit
+
+Logs for the jsmacOS-onboarder script can be found at /var/tmp/jsmacOSOnboarder.log
+
+For full detailed deployment steps visit the **[Wiki](https://github.com/darlow86/JSmacOS-Onboarder/wiki)**
+
+---
+
+
 ### Configuration Profile Manifest
+
+When creating the configuration profile for the macOS Onboarder you may wish to use popular GUI tools [Profile Creator](https://github.com/ProfileCreator/ProfileCreator) or [iMazing Profile Editor](https://imazing.com/profile-editor)
+
+Install the [Configuration Profile Manifest](https://github.com/darlow86/JSmacOS-Onboarder/tree/add-plist/Profile%20Configuration%20Manifest) to your local machine to build the required configuration profile through Profile Creator or iMazing Profile Editor
+
+For guides on where to install the manifest plist visit [Profile Creator Manifest Instructions](https://github.com/ProfileCreator/ProfileManifests/wiki/Getting-Started#how-to-create-a-profile-manifest) or [iMazing Profile Editor Instructions](https://imazing.com/guides/imazing-profile-editor-working-with-custom-preference-manifests) 
+
 
 ---
 
 ### User Guide
 
-Please use the wiki to find full usage guide
+Please use the **[Wiki](https://github.com/darlow86/JSmacOS-Onboarder/wiki)** to find full usage guide
 
 ---
 
