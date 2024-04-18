@@ -1,6 +1,3 @@
-# Renamed Project: Update Coming Soon
-
-
 ## School Assembly: V2.0                  
 
 **Renamed Project: Same tool, new name!**
