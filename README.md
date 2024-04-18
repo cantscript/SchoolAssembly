@@ -38,9 +38,9 @@ App icons referenced by a configuration profile need to be on the device prior t
 To use the School Assembly tool follow the steps below
 * Install [Installomator](https://github.com/Installomator/Installomator) on the target device(s) via Jamf School prior to using the tool
 * Package any icon images and deploy to the target device(s) via Jamf School prior to using the tool
-* Create a configuration profile to control the School Assembly tool, there is an [Example Configuration Profile](https://github.com/darlow86/JSmacOS-Onboarder/blob/add-plist/Example%20JSmacOS%20Onboarder%20Profile.mobileconfig) available
+* Create a configuration profile to control the School Assembly tool, there is an [Example Configuration Profile](https://github.com/cantscript/SchoolAssembly/blob/add-plist/plist%20example/com.cantscript.schoolassembly.plist) available
 * Upload the configuration profile into Jamf School and deploy to target device(s)
-* Copy the [School Assembly script](https://github.com/darlow86/JSmacOS-Onboarder/blob/add-plist/jsmacos-onboarder.sh) into Jamf School
+* Copy the [School Assembly script](https://github.com/cantscript/SchoolAssembly/blob/add-plist/SchoolAssembly.sh) into Jamf School
 * Scope and deploy to target device(s)
 * School Assembly tool will run on target device(s), installing swiftDialog if required
 
