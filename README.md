@@ -2,7 +2,7 @@
 
 **Renamed Project: Same tool, new name!**
 
-<img width="576" src="https://github.com/cantscript/SchoolAssembly/blob/add-plist/Images/School%20Assembly%20Window.png">
+<img width="576" src="https://github.com/cantscript/SchoolAssembly/blob/main/Images/School%20Assembly%20Window.png">
 
 **Newly updated project which now uses a Configuration Profile to control the script!**
 Admins no longer need to edit anything in the script for easier manipulation and ongoing maintenance 
