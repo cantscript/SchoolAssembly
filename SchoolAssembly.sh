@@ -32,7 +32,7 @@
 
 ################################################################################
 #                                                                              #
-#                  macOS App Onboarding for Jamf School: V2.0                  #
+#                            School Assembly: V2.0                             #
 #                                                                              #
 #  This script has been heavily inspired by "Progress 1st swiftDialog.sh" &    #
 #  "Installomator 1st Auto-install DEPNotify.sh" by                            #
@@ -75,7 +75,7 @@ echo "################################" >> $jsOnboarderLog
 echo "" >> $jsOnboarderLog
 
 
-MANAGED_PREFERENCE_DOMAIN="com.jsmacos.onboarder"
+MANAGED_PREFERENCE_DOMAIN="com.cantscript.schoolassembly"
 
 getPref() { # $1: key, $2: default value, $3: domain
 	local key=${1:?"key required"}

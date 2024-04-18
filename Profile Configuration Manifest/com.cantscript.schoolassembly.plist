@@ -35,11 +35,11 @@
 
 	<!-- A description of the payload. -->
 	<key>pfm_description</key>
-	<string>Control settings for the JS macOS Onboarder Script</string>
+	<string>Control settings School Assembly Tool</string>
 	
 	<!-- The preference domain of the payload. This should be the same as PayloadType in the pfm_subkeys.-->
 	<key>pfm_domain</key>
-	<string>com.jsmacos.onboarder</string>
+	<string>com.cantscript.schoolassembly</string>
 	
 	<!-- The format version is used by the application to know it can support all manifest keys in this manifest. -->
 	<!-- Sometimes new keys are added, but those will not be supported by older versions of the application. -->
@@ -55,7 +55,7 @@
 	
 	<!-- This is the title of the manifest -->
 	<key>pfm_title</key>
-	<string>JS macOS Onboarder</string>
+	<string>School Assembly</string>
 	
 	<!-- This determines if there can be more than one payload in the profile for this PayloadType. -->
 	<key>pfm_unique</key>
@@ -78,7 +78,7 @@
 		<!-- Description for the payload shown when the payload is installed. -->
 		<dict>
 			<key>pfm_default</key>
-			<string>Configures and controls JS macOS Onboarder Script </string> <!-- CHANGE THIS VALUE -->
+			<string>Configures and controls School Assembly Tool </string> <!-- CHANGE THIS VALUE -->
 			<key>pfm_description</key>
 			<string>Description of the payload.</string>
 			<key>pfm_description_reference</key>
@@ -95,7 +95,7 @@
 		<!-- Display Name of the payload shown when the payload is installed. -->
 		<dict>
 			<key>pfm_default</key>
-			<string>JS macOS Onboarder</string> <!-- CHANGE THIS VALUE -->
+			<string>School Assembly</string> <!-- CHANGE THIS VALUE -->
 			<key>pfm_description</key>
 			<string>Name of the payload.</string>
 			<key>pfm_description_reference</key>
@@ -114,7 +114,7 @@
 		<!-- The base identifier this payload should use. This will then be expanded by the application to add the root identifier + the payload UUID to create a unique identifier automatically. -->
 		<dict>
 			<key>pfm_default</key>
-			<string>com.jsmacos.onboarder</string> <!-- CHANGE THIS VALUE TO THE SAME AS pfm_domain and PayloadType -->
+			<string>com.cantscript.schoolassembly</string> <!-- CHANGE THIS VALUE TO THE SAME AS pfm_domain and PayloadType -->
 			<key>pfm_description</key>
 			<string>A unique identifier for the payload, dot-delimited.  Usually root PayloadIdentifier+subidentifier</string>
 			<key>pfm_description_reference</key>
@@ -133,7 +133,7 @@
 		<!-- This is the PayloadType of the payload. -->
 		<dict>
 			<key>pfm_default</key>
-			<string>com.jsmacos.onboarder</string> <!-- CHANGE THIS VALUE TO THE SAME AS pfm_domain and PayloadIdentifier -->
+			<string>com.cantscript.schoolassembly</string> <!-- CHANGE THIS VALUE TO THE SAME AS pfm_domain and PayloadIdentifier -->
 			<key>pfm_description</key>
 			<string>The type of the payload, a reverse dns string.</string>
 			<key>pfm_description_reference</key>
@@ -214,7 +214,7 @@ A profile can consist of payloads with different version numbers. For example, c
 			<key>pfm_title</key>
 			<string>Run Script Locally</string>
 			<key>pfm_description</key>
-			<string>If you want to run script locally for testing set run as local to true. Displays JS macOS onboarder in window and prompts for password in terminal.</string>
+			<string>If you want to run script locally for testing set run as local to true. Displays School Assembly in window and prompts for password in terminal.</string>
 			<key>pfm_default</key>
 			<string>True</string>
 		</dict>
@@ -256,7 +256,7 @@ A profile can consist of payloads with different version numbers. For example, c
 			
 			<!-- This value will be used as the description shown below the Tile for the key. -->
 			<key>pfm_description</key>
-			<string>Set the welcome message for the main JS macOS Onboarder window. Markdown can be used for for formatting.</string>
+			<string>Set the welcome message for the main School Assembly window. Markdown can be used for for formatting.</string>
 		</dict>
 		
 		<dict>
@@ -338,7 +338,7 @@ A profile can consist of payloads with different version numbers. For example, c
 							<key>pfm_title</key>
 							<string>Display Name</string>
 							<key>pfm_description</key>
-							<string>The name of the app as you wish to display it in the onboarder window.</string>
+							<string>The name of the app as you wish to display it in the School Assembly window.</string>
 						</dict>
 						
 					</array>
@@ -396,7 +396,7 @@ A profile can consist of payloads with different version numbers. For example, c
 							<key>pfm_title</key>
 							<string>Display Name</string>
 							<key>pfm_description</key>
-							<string>The name of the app as you wish to display it in the onboarder window.</string>
+							<string>The name of the app as you wish to display it in the School Assembly window.</string>
 						</dict>
 					</array>
 				</dict>

@@ -28,21 +28,19 @@
 				</dict>
 			</array>
 			<key>PayloadDescription</key>
-			<string>Configures and controls JS macOS Onboarder Script </string>
+			<string>Configures and controls School Assembly Tool </string>
 			<key>PayloadDisplayName</key>
-			<string>JS macOS Onboarder</string>
+			<string>School Assembly</string>
 			<key>PayloadIdentifier</key>
-			<string>com.github.erikberglund.ProfileCreator.7DB7752B-3EC4-4CAF-8F6A-10CD7578E9B8.com.jsmacos.onboarder.D1423D77-6D9A-4D6F-8023-A2F45BD9F998</string>
+			<string>com.github.erikberglund.ProfileCreator.3F79A2EE-0A9C-4F47-B164-0A983777C5B1.com.cantscript.schoolassembly.D8302B5D-856F-4637-B346-D58810ABF1A4</string>
 			<key>PayloadOrganization</key>
 			<string></string>
 			<key>PayloadType</key>
-			<string>com.jsmacos.onboarder</string>
+			<string>com.cantscript.schoolassembly</string>
 			<key>PayloadUUID</key>
-			<string>D1423D77-6D9A-4D6F-8023-A2F45BD9F998</string>
+			<string>D8302B5D-856F-4637-B346-D58810ABF1A4</string>
 			<key>PayloadVersion</key>
 			<integer>1</integer>
-			<key>appLogging</key>
-			<false/>
 			<key>completeMessage</key>
 			<string>Go And Be Awesome! Thanks! IT</string>
 			<key>completeTitle</key>
@@ -56,19 +54,19 @@
 		</dict>
 	</array>
 	<key>PayloadDescription</key>
-	<string>Example Profile to control JSmacOS Onboarder</string>
+	<string>Configuration for School Assembly Tool</string>
 	<key>PayloadDisplayName</key>
-	<string>Example JSmacOS Onboarder Profile</string>
+	<string>School Assembly</string>
 	<key>PayloadIdentifier</key>
-	<string>com.github.erikberglund.ProfileCreator.7DB7752B-3EC4-4CAF-8F6A-10CD7578E9B8</string>
+	<string>com.github.erikberglund.ProfileCreator.3F79A2EE-0A9C-4F47-B164-0A983777C5B1</string>
 	<key>PayloadOrganization</key>
-	<string>Anthony Darlow</string>
+	<string>CantScript.com</string>
 	<key>PayloadScope</key>
 	<string>System</string>
 	<key>PayloadType</key>
 	<string>Configuration</string>
 	<key>PayloadUUID</key>
-	<string>7DB7752B-3EC4-4CAF-8F6A-10CD7578E9B8</string>
+	<string>3F79A2EE-0A9C-4F47-B164-0A983777C5B1</string>
 	<key>PayloadVersion</key>
 	<integer>1</integer>
 </dict>
