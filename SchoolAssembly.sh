@@ -1,34 +1,5 @@
 #!/bin/bash
 
-############################################################
-# License information
-#########################################################################################
-#
-#      Copyright (c) 2023, JAMF Software, LLC.  All rights reserved.
-#
-#       Redistribution and use in source and binary forms, with or without
-#       modification, are permitted provided that the following conditions are met:
-#               * Redistributions of source code must retain the above copyright
-#                 notice, this list of conditions and the following disclaimer.
-#               * Redistributions in binary form must reproduce the above copyright
-#                 notice, this list of conditions and the following disclaimer in the
-#                 documentation and/or other materials provided with the distribution.
-#               * Neither the name of the JAMF Software, LLC nor the
-#                 names of its contributors may be used to endorse or promote products
-#                 derived from this software without specific prior written permission.
-#
-#       THIS SOFTWARE IS PROVIDED BY JAMF SOFTWARE, LLC "AS IS" AND ANY
-#       EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-#       WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-#       DISCLAIMED. IN NO EVENT SHALL JAMF SOFTWARE, LLC BE LIABLE FOR ANY
-#       DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-#       (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-#       LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-#       ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-#       (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-#       SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-##########################################################################################
 
 ################################################################################
 #                                                                              #
@@ -60,6 +31,33 @@ if [ -f $jsOnboarderLog ]; then
 	rm $jsOnboarderLog
 fi
 
+echo "For detailed Installomator logs: /private/var/log/Installomator.log" >> $jsOnboarderLog
+echo "For detailed swiftDialog control logs: /var/tmp/dialog.log" >> $jsOnboarderLog
+echo "" >> $jsOnboarderLog
+echo "################################" >> $jsOnboarderLog
+echo "################################" >> $jsOnboarderLog
+echo "" >> $jsOnboarderLog
+
+doneFlag=/private/var/db/.SchoolAssembed
+
+if [ -f $doneFlag ]; then 
+	echo "School already Assembled! Done flag present" >> $jsOnboarderLog
+	exit 
+fi
+
+###Install Dialog, if required###
+echo "Checking swiftDialog status...." >> $jsOnboarderLog
+if [[ -f $dialogPath ]]; then
+	echo "swiftDialog already installed....progressing" >> $jsOnboarderLog
+else
+	echo "swiftDialog required....starting download" >> $jsOnboarderLog
+	$installoPath dialog $installoOptions
+	echo "-----------" >> $jsOnboarderLog
+	echo "swiftDialog installed" >> $jsOnboarderLog
+	echo "----------" >> $jsOnboarderLog
+	sleep 3
+fi
+
 
 ################################################################################
 #                                                                              #
@@ -67,12 +65,6 @@ fi
 #                                                                              #
 ################################################################################
 
-echo "For detailed Installomator logs: /private/var/log/Installomator.log" >> $jsOnboarderLog
-echo "For detailed swiftDialog control logs: /var/tmp/dialog.log" >> $jsOnboarderLog
-echo "" >> $jsOnboarderLog
-echo "################################" >> $jsOnboarderLog
-echo "################################" >> $jsOnboarderLog
-echo "" >> $jsOnboarderLog
 
 
 MANAGED_PREFERENCE_DOMAIN="com.cantscript.schoolassembly"
@@ -332,18 +324,6 @@ echo "" >> $jsOnboarderLog
 /usr/bin/caffeinate -d -i -m -u &
 caffeinatepid=$!
 
-###Install Dialog, if required###
-echo "Checking swiftDialog status...." >> $jsOnboarderLog
-if [[ -f $dialogPath ]]; then
-	echo "swiftDialog already installed....progressing" >> $jsOnboarderLog
-else
-	echo "swiftDialog required....starting download" >> $jsOnboarderLog
-	$installoPath dialog $installoOptions
-	echo "-----------" >> $jsOnboarderLog
-	echo "swiftDialog installed" >> $jsOnboarderLog
-	echo "----------" >> $jsOnboarderLog
-	sleep 3
-fi
 
 ################################################################################
 #                                                                              #
@@ -544,6 +524,7 @@ $dialogPath --mini --title "$endTitle" --message "$endMessage" --alignment "cent
 
 echo "" >> $jsOnboarderLog
 echo "Script Complete!" >> $jsOnboarderLog
+touch $doneFlag
 echo "" >> $jsOnboarderLog
 echo "################################" >> $jsOnboarderLog
 echo "################################" >> $jsOnboarderLog
