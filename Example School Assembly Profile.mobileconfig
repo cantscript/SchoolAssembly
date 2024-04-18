@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array>
+		<dict>
+			<key>AppInstalls</key>
+			<array>
+				<dict>
+					<key>appIcon</key>
+					<string>/Applications/Google Chrome.app/Contents/Resources/app.icns</string>
+					<key>appLabel</key>
+					<string>googlechromepkg</string>
+					<key>appName</key>
+					<string>Google Chrome</string>
+				</dict>
+			</array>
+			<key>AppWatch</key>
+			<array>
+				<dict>
+					<key>appIcon</key>
+					<string>/Applications/Keynote.app/Contents/Resources/AppIcon.icns</string>
+					<key>appLocation</key>
+					<string>/Applications/Keynote.app</string>
+					<key>appName</key>
+					<string>Keynote</string>
+				</dict>
+			</array>
+			<key>PayloadDescription</key>
+			<string>Configures and controls School Assembly Tool </string>
+			<key>PayloadDisplayName</key>
+			<string>School Assembly</string>
+			<key>PayloadIdentifier</key>
+			<string>com.github.erikberglund.ProfileCreator.3F79A2EE-0A9C-4F47-B164-0A983777C5B1.com.cantscript.schoolassembly.D8302B5D-856F-4637-B346-D58810ABF1A4</string>
+			<key>PayloadOrganization</key>
+			<string></string>
+			<key>PayloadType</key>
+			<string>com.cantscript.schoolassembly</string>
+			<key>PayloadUUID</key>
+			<string>D8302B5D-856F-4637-B346-D58810ABF1A4</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+			<key>completeMessage</key>
+			<string>Go And Be Awesome! Thanks! IT</string>
+			<key>completeTitle</key>
+			<string>Your Mac is ready to go</string>
+			<key>mainMessage</key>
+			<string>\n**Hello you _awesome_ person!** \n\nWe need to install some apps for you, this might take a while. Grab a coffee while you wait.</string>
+			<key>runLocal</key>
+			<true/>
+			<key>userGreeting</key>
+			<true/>
+		</dict>
+	</array>
+	<key>PayloadDescription</key>
+	<string>Configuration for School Assembly Tool</string>
+	<key>PayloadDisplayName</key>
+	<string>School Assembly</string>
+	<key>PayloadIdentifier</key>
+	<string>com.github.erikberglund.ProfileCreator.3F79A2EE-0A9C-4F47-B164-0A983777C5B1</string>
+	<key>PayloadOrganization</key>
+	<string>CantScript.com</string>
+	<key>PayloadScope</key>
+	<string>System</string>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>3F79A2EE-0A9C-4F47-B164-0A983777C5B1</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>
