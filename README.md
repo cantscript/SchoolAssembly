@@ -39,9 +39,9 @@ App icons referenced by a configuration profile need to be on the device prior t
 To use the School Assembly tool follow the steps below
 * Install [Installomator](https://github.com/Installomator/Installomator) on the target device(s) via Jamf School prior to using the tool
 * Package any icon images and deploy to the target device(s) via Jamf School prior to using the tool
-* Create a configuration profile to control the School Assembly tool, there is an [Example Configuration Profile](https://github.com/cantscript/SchoolAssembly/blob/add-plist/plist%20example/com.cantscript.schoolassembly.plist) available
+* Create a configuration profile to control the School Assembly tool, there is an [Example Configuration Profile](https://github.com/cantscript/SchoolAssembly/blob/main/plist%20example/com.cantscript.schoolassembly.plist) available
 * Upload the configuration profile into Jamf School and deploy to target device(s)
-* Copy the [School Assembly script](https://github.com/cantscript/SchoolAssembly/blob/add-plist/SchoolAssembly.sh) into Jamf School
+* Copy the [School Assembly script](https://github.com/cantscript/SchoolAssembly/blob/main/SchoolAssembly.sh) into Jamf School
 * Scope and deploy to target device(s)
 * School Assembly tool will run on target device(s), installing swiftDialog if required
 
@@ -60,7 +60,7 @@ For full detailed deployment steps visit the **[Wiki](https://github.com/darlow8
 
 When creating the configuration profile for School Assembly you may wish to use popular GUI tools [Profile Creator](https://github.com/ProfileCreator/ProfileCreator) or [iMazing Profile Editor](https://imazing.com/profile-editor)
 
-Install the [Configuration Profile Manifest](https://github.com/darlow86/JSmacOS-Onboarder/tree/add-plist/Profile%20Configuration%20Manifest) to your local machine to build the required configuration profile through Profile Creator or iMazing Profile Editor
+Install the [Configuration Profile Manifest](https://github.com/cantscript/SchoolAssembly/blob/main/Profile%20Configuration%20Manifest/com.cantscript.schoolassembly.plist) to your local machine to build the required configuration profile through Profile Creator or iMazing Profile Editor
 
 For guides on where to install the manifest plist visit [Profile Creator Manifest Instructions](https://github.com/ProfileCreator/ProfileManifests/wiki/Getting-Started#how-to-create-a-profile-manifest) or [iMazing Profile Editor Instructions](https://imazing.com/guides/imazing-profile-editor-working-with-custom-preference-manifests) 
 
