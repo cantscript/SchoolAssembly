@@ -50,7 +50,7 @@ If there is no user logged into the device the tool will wait until, checking ev
 If there is no configuration profile installed a notification will be displayed onscreen and the tool will exit
 
 Logs for the School Assembly script can be found at `/var/tmp/jsmacOSOnboarder.log` \
-Once School Assembly has ran it creates a done flag in the following location which will prevent further runs of School Assembly, until removed: `/Users/Shared/.SchoolAssembed`
+Once School Assembly has ran it creates a done flag in the following location which will prevent further runs of School Assembly, until removed: `/Users/Shared/.SchoolAssembled`
 
 For full detailed deployment steps visit the **[Wiki](https://github.com/darlow86/JSmacOS-Onboarder/wiki)**
 
