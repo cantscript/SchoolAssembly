@@ -10,7 +10,7 @@
 #  Søren Theilgaard                                                            #
 #  https://github.com/Theile                                                   #
 #                                                                              #
-#  Script by Anthony Darlow - December 2022                                    #
+#  Script by Anthony Darlow - April 2024.                                      #
 #  By using this script you do so understanding the script creator is not      #
 #  responsible for any undesired outcomes of using this script and comes       #
 #  without any support                                                         #
@@ -58,6 +58,11 @@ else
 	sleep 3
 fi
 
+####Check User is Logged In by checking for Finder & Dock process####
+until pgrep -q -x "Finder" && pgrep -q -x "Dock"; do
+	echo "Finder & Dock are NOT running; pausing for 1 second" >> $jsOnboarderLog
+	sleep 3
+done
 
 ################################################################################
 #                                                                              #
@@ -309,12 +314,6 @@ echo "" >> $jsOnboarderLog
 #                                                                              #
 ################################################################################
 
-
-####Check User is Logged In by checking for Finder & Dock process####
-until pgrep -q -x "Finder" && pgrep -q -x "Dock"; do
-	echo "Finder & Dock are NOT running; pausing for 1 second" >> $jsOnboarderLog
-	sleep 3
-done
 
 echo "" >> $jsOnboarderLog
 
