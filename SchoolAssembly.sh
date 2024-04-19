@@ -38,7 +38,7 @@ echo "################################" >> $jsOnboarderLog
 echo "################################" >> $jsOnboarderLog
 echo "" >> $jsOnboarderLog
 
-doneFlag=/Users/Shared/.SchoolAssembed
+doneFlag=/Users/Shared/.SchoolAssembled
 
 if [ -f $doneFlag ]; then 
 	echo "School already Assembled! Done flag present" >> $jsOnboarderLog
