@@ -371,7 +371,7 @@ fi
 ####Add titles to be installed with Installomator to list and set status to waiting####
 sleep 2
 
-if [ $progressSteps1 = 0 ]; then
+if [ $progressSteps1 != 0 ]; then
 	for title in "${apps[@]}"; do
 		echo "listitem: add, title: "$(echo "$title" | cut -d ':' -f3 | cut -d '"' -f1)", icon: "$(echo "$title" | cut -d ':' -f2 | cut -d '"' -f1)", statustext: waiting, status: wait " >> $cmdLog
 	done 
@@ -391,7 +391,7 @@ echo "progress: $progressCount" >> $cmdLog
 
 
 ####Install Apps using Intstallomator####
-if [ $progressSteps1 = 0 ]; then
+if [ $progressSteps1 != 0 ]; then
 	for app in "${apps[@]}"; do
 		sleep 0.5
 		echo "listitem: title: "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)", status: pending, statustext: Installing" >> $cmdLog
