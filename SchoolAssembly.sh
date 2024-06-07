@@ -176,9 +176,9 @@ echo "" >> $jsOnboarderLog
 if [[  $installAppLogging == "true" ]]; then
 	for items in "${apps[@]}"; do
 		echo "Verbose App Logging details for Apps to be Installed" >> $jsOnboarderLog
-		echo "Icon Location: "$( echo "$items" | cut -d ':' -f2 | cut -d '"' -f1 | tr -d '\')"" >> $jsOnboarderLog
-		echo "Display Name: "$(echo "$items" | cut -d ':' -f3 | cut -d '"' -f1)"" >> $jsOnboarderLog
-		echo "Installomator Label: "$(echo "$items" | cut -d ':' -f4 | cut -d '"' -f1 | tr -d '\')"" >> $jsOnboarderLog
+		echo "Icon Location: "$( echo "$items" | cut -d '"' -f3 | cut -c2-)"" >> $jsOnboarderLog
+		echo "Display Name: "$(echo "$items" | cut -d '"' -f5 | cut -c2-)"" >> $jsOnboarderLog
+		echo "Installomator Label: "$(echo "$items" | cut -d '"' -f7 | tr -d ':')"" >> $jsOnboarderLog
 		echo "" >> $jsOnboarderLog
 		echo "################################" >> $jsOnboarderLog
 		echo "################################" >> $jsOnboarderLog
@@ -254,9 +254,9 @@ echo "" >> $jsOnboarderLog
 if [[  $installAppLogging == "true" ]]; then
 	for items in "${storeInstalls[@]}"; do
 		echo "Verbose App Logging details for Apps to be Watched" >> $jsOnboarderLog
-		echo "Icon Location: "$( echo "$items" | cut -d ':' -f2 | cut -d '"' -f1 | tr -d '\')"" >> $jsOnboarderLog
-		echo "App Location: "$(echo "$items" | cut -d ':' -f3 | cut -d '"' -f1)"" >> $jsOnboarderLog
-		echo "Display Name: "$(echo "$items" | cut -d ':' -f4 | cut -d '"' -f1 | tr -d '\')"" >> $jsOnboarderLog
+		echo "Icon Location: "$( echo "$items" | cut -d '"' -f3 | cut -c2-)"" >> $jsOnboarderLog
+		echo "App Location: "$(echo "$items" | cut -d '"' -f5 | cut -c2-)"" >> $jsOnboarderLog
+		echo "Display Name: "$(echo "$items" | cut -d '"' -f7 | tr -d ':')"" >> $jsOnboarderLog
 		echo "" >> $jsOnboarderLog
 		echo "################################" >> $jsOnboarderLog
 		echo "################################" >> $jsOnboarderLog
@@ -373,7 +373,7 @@ sleep 2
 
 if [ $progressSteps1 != 0 ]; then
 	for title in "${apps[@]}"; do
-		echo "listitem: add, title: "$(echo "$title" | cut -d ':' -f3 | cut -d '"' -f1)", icon: "$(echo "$title" | cut -d ':' -f2 | cut -d '"' -f1)", statustext: waiting, status: wait " >> $cmdLog
+		echo "listitem: add, title: "$(echo "$title" | cut -d '"' -f5 | cut -c2-)", icon: "$(echo "$title" | cut -d '"' -f3 | cut -c2-)", statustext: waiting, status: wait " >> $cmdLog
 	done 
 	echo "listitem: delete, title: Onboarding Starting...." >> $cmdLog
 else
@@ -394,27 +394,27 @@ echo "progress: $progressCount" >> $cmdLog
 if [ $progressSteps1 != 0 ]; then
 	for app in "${apps[@]}"; do
 		sleep 0.5
-		echo "listitem: title: "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)", status: pending, statustext: Installing" >> $cmdLog
-		echo "progresstext: Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)" in Progress" >> $cmdLog
-		echo "Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)">>>>in Progress>>>>" >> $jsOnboarderLog
+		echo "listitem: title: "$(echo "$app" | cut -d '"' -f5 | cut -c2-)", status: pending, statustext: Installing" >> $cmdLog
+		echo "progresstext: Install of "$(echo "$app" | cut -d '"' -f5 | cut -c2-)" in Progress" >> $cmdLog
+		echo "Install of "$(echo "$app" | cut -d '"' -f5 | cut -c2-)">>>>in Progress>>>>" >> $jsOnboarderLog
 	if [[ $runOption == "true" ]]; then
-		runInstallo="$(sudo $installoPath "$(echo "$app" | cut -d ':' -f4 | cut -d '"' -f1)" $installoOptions)"
+		runInstallo="$(sudo $installoPath "$(echo "$app" | cut -d '"' -f7 | tr -d ':')" $installoOptions)"
 		else
-			runInstallo="$($installoPath "$(echo "$app" | cut -d ':' -f4 | cut -d '"' -f1)" $installoOptions)"
+			runInstallo="$($installoPath "$(echo "$app" | cut -d '"' -f7 | tr -d ':')" $installoOptions)"
 		fi 
 		exitStatus="$( echo "${runInstallo}" | grep --binary-files=text -i "exit" | tail -1 | sed -E 's/.*exit code ([0-9]).*/\1/g' || true )" 
 		if [[ ${exitStatus} -eq 0 ]] ; then
-			echo "listitem: title: "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)", status: success, statustext: Installed" >> $cmdLog
+			echo "listitem: title: "$(echo "$app" | cut -d '"' -f5 | cut -c2-)", status: success, statustext: Installed" >> $cmdLog
 				progressCount=$(( progressCount + 1))
 			echo "progress: $progressCount" >> $cmdLog
-			echo "progresstext: Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)" complete" >> $cmdLog
-			echo "Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)"++++complete++++" >> $jsOnboarderLog
+			echo "progresstext: Install of "$(echo "$app" | cut -d '"' -f5 | cut -c2-)" complete" >> $cmdLog
+			echo "Install of "$(echo "$app" | cut -d '"' -f5 | cut -c2-)"++++complete++++" >> $jsOnboarderLog
 		else
-			echo "listitem: title: "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)", status: error, statustext: Installation Error" >> $cmdLog
+			echo "listitem: title: "$(echo "$app" | cut -d '"' -f5 | cut -c2-)", status: error, statustext: Installation Error" >> $cmdLog
 				progressCount=$(( progressCount + 1)) 
 			echo "progress: $progressCount" >> $cmdLog
-			echo "progresstext: Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)" Error installation" >> $cmdLog
-			echo "ERROR: Installation of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)"----failed-----" >> $jsOnboarderLog
+			echo "progresstext: Install of "$(echo "$app" | cut -d '"' -f5 | cut -c2-)" Error installation" >> $cmdLog
+			echo "ERROR: Installation of "$(echo "$app" | cut -d '"' -f5 | cut -c2-)"----failed-----" >> $jsOnboarderLog
 		fi	
 			#Rest before next item
 			sleep 1
@@ -447,7 +447,7 @@ echo "icon: /System/Applications/App Store.app/Contents/Resources/AppIcon.icns" 
 
 for masApp in "${storeInstalls[@]}"; do
 	sleep 0.5
-	echo "listitem: add, title: "$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", statustext: checking, status: wait, icon: "$(echo "$masApp" | cut -d ':' -f2 | cut -d '"' -f1)"" >> $cmdLog
+	echo "listitem: add, title: "$(echo "$masApp" | cut -d '"' -f7 | tr -d ':')", statustext: checking, status: wait, icon: "$(echo "$masApp" | cut -d '"' -f3 | cut -c2-)"" >> $cmdLog
 done 
 sleep 1
 
@@ -458,11 +458,11 @@ echo "" >> $jsOnboarderLog
 
 for masApp in "${storeInstalls[@]}"; do
 	sleep 0.5
-	targetApp=$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)
+	targetApp=$(echo "$masApp" | cut -d '"' -f5 | cut -c2-)
 	removeWS=$(echo "$targetApp" | awk '{ print substr( $0, 1, length($0)-1 ) }')
 	if [ -e "$removeWS" ]; then
-		echo "listitem: title: "$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: success, statustext:  Installed " >> $cmdLog
-		echo ""$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)" ++++Installed++++" >> $jsOnboarderLog
+		echo "listitem: title: "$(echo "$masApp" | cut -d '"' -f7 | tr -d ':')", status: success, statustext:  Installed " >> $cmdLog
+		echo ""$(echo "$masApp" | cut -d '"' -f7 | tr -d ':')" ++++Installed++++" >> $jsOnboarderLog
 		progressCount=$(( progressCount + 1)) 
 		echo "progress: $progressCount" >> $cmdLog
 		sleep 1
@@ -472,11 +472,11 @@ done
 ####Sets status for apps not yet installed & adds them to a new Var####
 waitInstalls=()
 for masApp in "${storeInstalls[@]}"; do
-	targetApp=$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)
+	targetApp=$(echo "$masApp" | cut -d '"' -f5 | cut -c2-)
 	removeWS=$(echo "$targetApp" | awk '{ print substr( $0, 1, length($0)-1 ) }')
 	if [ ! -e "$removeWS" ]; then
-		echo "listitem: title: "$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: wait, statustext:  Waiting for Installation" >> $cmdLog
-		echo ""$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: wait, statustext:  Waiting for Installation" >> $jsOnboarderLog
+		echo "listitem: title: "$(echo "$masApp" | cut -d '"' -f7 | tr -d ':')", status: wait, statustext:  Waiting for Installation" >> $cmdLog
+		echo ""$(echo "$masApp" | cut -d '"' -f7 | tr -d ':')", status: wait, statustext:  Waiting for Installation" >> $jsOnboarderLog
 		waitInstalls+=("$masApp")
 	fi 
 done
@@ -487,11 +487,11 @@ done
 while [ $progressCount != $totalSteps ]; do
 	for waitApp in "${waitInstalls[@]}"; do
 		sleep 0.5
-		targetApp=$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)
+		targetApp=$(echo "$waitApp" | cut -d '"' -f5 | cut -c2-)
 		removeWS=$(echo "$targetApp" | awk '{ print substr( $0, 1, length($0)-1 ) }')
 		if [ -e "$removeWS" ]; then
-			echo "listitem: title: "$(echo "$waitApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: success, statustext:  Installed " >> $cmdLog
-			echo ""$(echo "$waitApp" | cut -d ':' -f4 | cut -d '"' -f1)" ++++Installed++++" >> $jsOnboarderLog
+			echo "listitem: title: "$(echo "$waitApp" | cut -d '"' -f7 | tr -d ':')", status: success, statustext:  Installed " >> $cmdLog
+			echo ""$(echo "$waitApp" | cut -d '"' -f7 | tr -d ':')" ++++Installed++++" >> $jsOnboarderLog
 			progressCount=$(( progressCount + 1)) 
 			echo "progress: $progressCount" >> $cmdLog
 			####Remove installed app from the list####
@@ -505,7 +505,7 @@ while [ $progressCount != $totalSteps ]; do
 			echo "waitInstalls now contains ${waitInstalls[@]}" >> $jsOnboarderLog
 		else 
 			[ ! -e "$removeWS" ];
-			echo ""$(echo "$waitApp" | cut -d ':' -f4 | cut -d '"' -f1)" still waiting..." >> $jsOnboarderLog
+			echo ""$(echo "$waitApp" | cut -d '"' -f7 | tr -d ':')" still waiting..." >> $jsOnboarderLog
 		fi
 	done
 	####Changes progress text once all apps are installed and waiting for the final while loop logic####
