@@ -3,7 +3,7 @@
 
 ################################################################################
 #                                                                              #
-#                            School Assembly: V2.0                             #
+#                            School Assembly: V2.0.1                           #
 #                                                                              #
 #  This script has been heavily inspired by "Progress 1st swiftDialog.sh" &    #
 #  "Installomator 1st Auto-install DEPNotify.sh" by                            #
@@ -11,6 +11,7 @@
 #  https://github.com/Theile                                                   #
 #                                                                              #
 #  Script by Anthony Darlow - April 2024.                                      #
+#  Version Edit - June 2024                                                    #
 #  By using this script you do so understanding the script creator is not      #
 #  responsible for any undesired outcomes of using this script and comes       #
 #  without any support                                                         #
@@ -369,10 +370,19 @@ fi
 
 ####Add titles to be installed with Installomator to list and set status to waiting####
 sleep 2
-for title in "${apps[@]}"; do
-	echo "listitem: add, title: "$(echo "$title" | cut -d ':' -f3 | cut -d '"' -f1)", icon: "$(echo "$title" | cut -d ':' -f2 | cut -d '"' -f1)", statustext: waiting, status: wait " >> $cmdLog
-done 
-echo "listitem: delete, title: Onboarding Starting...." >> $cmdLog
+
+if [ $progressSteps1 = 0 ]; then
+	for title in "${apps[@]}"; do
+		echo "listitem: add, title: "$(echo "$title" | cut -d ':' -f3 | cut -d '"' -f1)", icon: "$(echo "$title" | cut -d ':' -f2 | cut -d '"' -f1)", statustext: waiting, status: wait " >> $cmdLog
+	done 
+	echo "listitem: delete, title: Onboarding Starting...." >> $cmdLog
+else
+	echo "listitem: delete, title: Onboarding Starting...." >> $cmdLog
+	echo "listitem: add, title: No Apps to Install, icon: /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/ToolbarInfo.icns, statustext: Complete, status: success" >> $cmdLog
+	echo "progresstext: Continuing" >> $cmdLog
+	sleep 2
+fi
+
 
 # Rest before start install and set progress bar to starting point
 progressCount=0
@@ -381,33 +391,38 @@ echo "progress: $progressCount" >> $cmdLog
 
 
 ####Install Apps using Intstallomator####
-for app in "${apps[@]}"; do
-	sleep 0.5
-	echo "listitem: title: "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)", status: pending, statustext: Installing" >> $cmdLog
-	echo "progresstext: Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)" in Progress" >> $cmdLog
-	echo "Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)">>>>in Progress>>>>" >> $jsOnboarderLog
+if [ $progressSteps1 = 0 ]; then
+	for app in "${apps[@]}"; do
+		sleep 0.5
+		echo "listitem: title: "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)", status: pending, statustext: Installing" >> $cmdLog
+		echo "progresstext: Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)" in Progress" >> $cmdLog
+		echo "Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)">>>>in Progress>>>>" >> $jsOnboarderLog
 	if [[ $runOption == "true" ]]; then
 		runInstallo="$(sudo $installoPath "$(echo "$app" | cut -d ':' -f4 | cut -d '"' -f1)" $installoOptions)"
-	else
-		runInstallo="$($installoPath "$(echo "$app" | cut -d ':' -f4 | cut -d '"' -f1)" $installoOptions)"
-	fi 
-	exitStatus="$( echo "${runInstallo}" | grep --binary-files=text -i "exit" | tail -1 | sed -E 's/.*exit code ([0-9]).*/\1/g' || true )" 
-	if [[ ${exitStatus} -eq 0 ]] ; then
-		echo "listitem: title: "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)", status: success, statustext: Installed" >> $cmdLog
-		progressCount=$(( progressCount + 1)) 
-		echo "progress: $progressCount" >> $cmdLog
-		echo "progresstext: Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)" complete" >> $cmdLog
-		echo "Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)"++++complete++++" >> $jsOnboarderLog
-	else
-		echo "listitem: title: "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)", status: error, statustext: Installation Error" >> $cmdLog
-		progressCount=$(( progressCount + 1)) 
-		echo "progress: $progressCount" >> $cmdLog
-		echo "progresstext: Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)" Error installation" >> $cmdLog
-		echo "ERROR: Installation of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)"----failed-----" >> $jsOnboarderLog
-	fi	
-	#Rest before next item
-	sleep 1
-done
+		else
+			runInstallo="$($installoPath "$(echo "$app" | cut -d ':' -f4 | cut -d '"' -f1)" $installoOptions)"
+		fi 
+		exitStatus="$( echo "${runInstallo}" | grep --binary-files=text -i "exit" | tail -1 | sed -E 's/.*exit code ([0-9]).*/\1/g' || true )" 
+		if [[ ${exitStatus} -eq 0 ]] ; then
+			echo "listitem: title: "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)", status: success, statustext: Installed" >> $cmdLog
+				progressCount=$(( progressCount + 1))
+			echo "progress: $progressCount" >> $cmdLog
+			echo "progresstext: Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)" complete" >> $cmdLog
+			echo "Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)"++++complete++++" >> $jsOnboarderLog
+		else
+			echo "listitem: title: "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)", status: error, statustext: Installation Error" >> $cmdLog
+				progressCount=$(( progressCount + 1)) 
+			echo "progress: $progressCount" >> $cmdLog
+			echo "progresstext: Install of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)" Error installation" >> $cmdLog
+			echo "ERROR: Installation of "$(echo "$app" | cut -d ':' -f3 | cut -d '"' -f1)"----failed-----" >> $jsOnboarderLog
+		fi	
+			#Rest before next item
+			sleep 1
+	done
+else
+		echo "No Installomator Apps to Install" >> $jsOnboarderLog
+fi
+
 	
 echo "" >> $jsOnboarderLog
 echo "Installation Phase Complete....Continuing...." >> $jsOnboarderLog
@@ -443,7 +458,9 @@ echo "" >> $jsOnboarderLog
 
 for masApp in "${storeInstalls[@]}"; do
 	sleep 0.5
-	if [ -e "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1 | cut -c 1)" ]; then
+	targetApp=$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)
+	removeWS=$(echo "$targetApp" | awk '{ print substr( $0, 1, length($0)-1 ) }')
+	if [ -e "$removeWS" ]; then
 		echo "listitem: title: "$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: success, statustext:  Installed " >> $cmdLog
 		echo ""$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)" ++++Installed++++" >> $jsOnboarderLog
 		progressCount=$(( progressCount + 1)) 
@@ -455,7 +472,9 @@ done
 ####Sets status for apps not yet installed & adds them to a new Var####
 waitInstalls=()
 for masApp in "${storeInstalls[@]}"; do
-	if [ ! -e "$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1 | cut -c 1)" ]; then
+	targetApp=$(echo "$masApp" | cut -d ':' -f3 | cut -d '"' -f1)
+	removeWS=$(echo "$targetApp" | awk '{ print substr( $0, 1, length($0)-1 ) }')
+	if [ ! -e "$removeWS" ]; then
 		echo "listitem: title: "$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: wait, statustext:  Waiting for Installation" >> $cmdLog
 		echo ""$(echo "$masApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: wait, statustext:  Waiting for Installation" >> $jsOnboarderLog
 		waitInstalls+=("$masApp")
@@ -468,7 +487,9 @@ done
 while [ $progressCount != $totalSteps ]; do
 	for waitApp in "${waitInstalls[@]}"; do
 		sleep 0.5
-		if [ -e "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1 | cut -c 1)" ]; then
+		targetApp=$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1)
+		removeWS=$(echo "$targetApp" | awk '{ print substr( $0, 1, length($0)-1 ) }')
+		if [ -e "$removeWS" ]; then
 			echo "listitem: title: "$(echo "$waitApp" | cut -d ':' -f4 | cut -d '"' -f1)", status: success, statustext:  Installed " >> $cmdLog
 			echo ""$(echo "$waitApp" | cut -d ':' -f4 | cut -d '"' -f1)" ++++Installed++++" >> $jsOnboarderLog
 			progressCount=$(( progressCount + 1)) 
@@ -482,8 +503,9 @@ while [ $progressCount != $totalSteps ]; do
 			waitInstalls=("${tempList[@]}")
 			unset tempList 
 			echo "waitInstalls now contains ${waitInstalls[@]}" >> $jsOnboarderLog
-		else [ ! -e "$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1 | cut -c 1)" ];
-			echo ""$(echo "$waitApp" | cut -d ':' -f3 | cut -d '"' -f1 | cut -c 1)" still waiting..." >> $jsOnboarderLog
+		else 
+			[ ! -e "$removeWS" ];
+			echo ""$(echo "$waitApp" | cut -d ':' -f4 | cut -d '"' -f1)" still waiting..." >> $jsOnboarderLog
 		fi
 	done
 	####Changes progress text once all apps are installed and waiting for the final while loop logic####
