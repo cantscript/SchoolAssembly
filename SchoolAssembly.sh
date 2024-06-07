@@ -176,7 +176,7 @@ fi
 if [ $noInstalls = 0 ]; then
 	echo "The resulting array contains ${#apps[@]} Apps to be installed" >> $jsOnboarderLog
 else
-	echo "The resulting array contains 0 Apps to be installed. Likely" >> $jsOnboarderLog
+	echo "The resulting array contains 0 Apps to be installed." >> $jsOnboarderLog
 fi
 
 
