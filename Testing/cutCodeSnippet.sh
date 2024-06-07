@@ -103,3 +103,67 @@ fi
 
 ### Return IFS to original state ###
 IFS=$oldIFS
+
+### Dump plist key into a variable ###
+watchList=$(getPref "AppWatch")
+
+### Change IFS for workflow ###
+oldIFS=
+IFS=,
+
+### Logic to define how many apps are to be watched ###
+echo ">>>> Starting...App Watch Paths" >> $jsOnboarderLog
+echo "################################" >> $jsOnboarderLog
+echo "Converting Prefs into script Vars" >> $jsOnboarderLog
+watchArray=($watchList)
+watchItemsNo=${#watchArray[@]}
+let requiredWatchApps=$watchItemsNo/3
+echo "There are $watchItemsNo items, resulting in $requiredWatchApps Apps to be watched" >> $jsOnboarderLog
+echo "-----------" >> $jsOnboarderLog
+
+### Pre-flight varibles ###
+storeInstalls=()
+watchCounter=1
+indexPoint=0
+echo "Iterating through apps to be watched" >> $jsOnboarderLog
+echo "R= # of required apps | I= Start index point of array | Current App count" >> $jsOnboarderLog
+
+
+### Create App watch list array for Switdialog ###
+while [ $watchCounter -le $requiredWatchApps ]; do
+	storeInstalls+=(${watchArray[@]:$indexPoint:3})
+	echo "R:$requiredWatchApps | I: $indexPoint | Added App: $watchCounter " >> $jsOnboarderLog
+	indexPoint=$(($indexPoint+3))
+	((watchCounter++))
+done
+echo "The resulting array contains ${#storeInstalls[@]} Apps to be watched" >> $jsOnboarderLog
+
+
+### Success / Error Message ###
+echo "-----------" >> $jsOnboarderLog
+if [ $requiredWatchApps = ${#storeInstalls[@]} ]; then
+	echo "SUCCESS: $requiredWatchApps apps where read from Prefs & ${#storeInstalls[@]} Apps have been added to Onboarder script" >> $jsOnboarderLog
+else
+	echo "ERROR: $requiredWatchApps apps where read from Prefs but ${#storeInstalls[@]} Apps have been added to Onboarder script" >> $jsOnboarderLog
+fi
+
+echo "" >> $jsOnboarderLog
+echo "################################" >> $jsOnboarderLog
+echo "################################" >> $jsOnboarderLog
+echo "" >> $jsOnboarderLog
+
+if [[  $installAppLogging == "true" ]]; then
+	for items in "${storeInstalls[@]}"; do
+		echo "Verbose App Logging details for Apps to be Watched" >> $jsOnboarderLog
+		echo "Icon Location: "$( echo "$items" | cut -d '"' -f3 | cut -c2-)"" >> $jsOnboarderLog
+		echo "App Location: "$(echo "$items" | cut -d '"' -f5 | cut -c2-)"" >> $jsOnboarderLog
+		echo "Display Name: "$(echo "$items" | cut -d '"' -f7 | tr -d ':')"" >> $jsOnboarderLog
+		echo "" >> $jsOnboarderLog
+		echo "################################" >> $jsOnboarderLog
+		echo "################################" >> $jsOnboarderLog
+		echo "" >> $jsOnboarderLog
+	done
+fi
+
+### Return IFS to original state ###
+IFS=$oldIFS
