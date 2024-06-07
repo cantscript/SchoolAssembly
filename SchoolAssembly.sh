@@ -161,12 +161,12 @@ done
 noInstalls=1
 
 if [ ${#apps[@]} = 1 ]; then
-	iconLocation="$( echo "$items" | cut -d '"' -f3 | cut -c2-)"
-	displayName="$(echo "$items" | cut -d '"' -f5 | cut -c2-)"
-	installomatorLabel="$(echo "$items" | cut -d '"' -f7 | tr -d ':')"
+	iconLocation="$( echo "$apps" | cut -d '"' -f3 | cut -c2-)"
+	displayName="$(echo "$apps" | cut -d '"' -f5 | cut -c2-)"
+	installomatorLabel="$(echo "$apps" | cut -d '"' -f7 | tr -d ':')"
 fi
 
-if [[ ${#apps[@]} = 1 && "$iconLocation" = "" && "$displayName" = "" && "$installomatorLabel" = "" ]]; then
+if [ ${#apps[@]} = 1 ] && [ "$iconLocation" = " " ] && [ "$displayName" = " " ] && [ "$installomatorLabel" = " " ]; then
 	noInstalls=1
 else
 	noInstalls=0
