@@ -157,7 +157,27 @@ while [ $appCounter -le $requiredApps ]; do
 	indexPoint=$(($indexPoint+3))
 	((appCounter++))
 done
-echo "The resulting array contains ${#apps[@]} Apps to be installed" >> $jsOnboarderLog
+
+noInstalls=1
+
+if [ ${#apps[@]} = 1 ]; then
+	iconLocation="$( echo "$items" | cut -d '"' -f3 | cut -c2-)"
+	displayName="$(echo "$items" | cut -d '"' -f5 | cut -c2-)"
+	installomatorLabel="$(echo "$items" | cut -d '"' -f7 | tr -d ':')"
+fi
+
+if [[ ${#apps[@]} = 1 && "$iconLocation" = "" && "$displayName" = "" && "$installomatorLabel" = "" ]]; then
+	noInstalls=1
+else
+	noInstalls=0
+fi
+
+
+if [ $noInstalls = 0 ]; then
+	echo "The resulting array contains ${#apps[@]} Apps to be installed" >> $jsOnboarderLog
+else
+	echo "The resulting array contains 0 Apps to be installed. Likely" >> $jsOnboarderLog
+fi
 
 
 ### Success / Error Message ###
@@ -333,8 +353,12 @@ caffeinatepid=$!
 	
 #####Installomator Installs####
 # Get the number of steps required for the progress bar
-progressSteps1=${#apps[@]}
-	
+if [ $noInstalls = 0 ]; then
+	progressSteps1=${#apps[@]}
+	else
+		progressSteps1=0
+fi
+
 ####App Store Installs####
 # Get the number of steps required for the progress bar
 progressSteps2=${#storeInstalls[@]}
