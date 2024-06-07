@@ -3,7 +3,7 @@
 
 ################################################################################
 #                                                                              #
-#                            School Assembly: V2.0.1                           #
+#                            School Assembly: V2.1.0                           #
 #                                                                              #
 #  This script has been heavily inspired by "Progress 1st swiftDialog.sh" &    #
 #  "Installomator 1st Auto-install DEPNotify.sh" by                            #
