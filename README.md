@@ -1,13 +1,11 @@
-## School Assembly: V2.0                  
+## School Assembly: V2.1                  
 
 **Renamed Project: Same tool, new name!**
 
 <img width="576" src="https://github.com/cantscript/SchoolAssembly/blob/main/Images/School%20Assembly%20Window.png">
 
-**Newly updated project which now uses a Configuration Profile to control the script!**
-Admins no longer need to edit anything in the script for easier manipulation and ongoing maintenance 
 
-App deployment/onboarding tool for macOS design for use Jamf School. School Assembly give's visual feedback to Admins or End User while installing applications on deployment of device
+App deployment/onboarding tool for macOS design for use Jamf School. School Assembly give's visual feedback to Admins or End User while installing applications on deployment of device. Admins no longer need to edit anything in the script for easier manipulation and ongoing maintenance
 
 ---
 
@@ -20,17 +18,16 @@ This workflow utilises
 Installomator must be installed on the target device(s) prior to running.
 swiftDialog will be installed via Installomator in script logic, if not already installed.
 
-Use one of the following to deliver Installomator to target device(s) with Jamf School
-1) By scripting installation before running School Assembly Tool                
+Use one of the following to deliver Installomator to target device(s) with Jamf School <br>
+1) By scripting installation before running School Assembly Tool                <br>
 2) Deploying via a package and then running School Assembly Tool
 
 
-_**App Icons**_
 
-App icons referenced by a configuration profile need to be on the device prior to running this tool. If you deploy Installomator by a package you could create a custom package which includes both Installomator and the required app icons and deploy that you your target device(s)
+_**New for V2.1: App Icons**_ <br>
+App Icons can now be pulled from the internet instead of / as well as local file paths. This means, that depending on your setup, there is no longer a dependancy on app icons referenced in a configuration profile to be on the device.
 
-**V2.0 does not allow for images references to be from the internet.** \
-*(This is a current limitation of the School Assembly Tool logic in this version. I hope to fix this in a future version)*
+See **[Wiki](https://github.com/darlow86/JSmacOS-Onboarder/wiki)** for more information
 
 ---
 
