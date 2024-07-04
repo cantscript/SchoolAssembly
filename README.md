@@ -2,10 +2,14 @@
 
 **Renamed Project: Same tool, new name!**
 
-<img width="576" src="https://github.com/cantscript/SchoolAssembly/blob/main/Images/School%20Assembly%20Window.png">
+<p align="center">
+<img width="256" alt="mac1024" src="https://github.com/cantscript/SchoolAssembly/blob/main/Images/SchoolAssemblyIcon.png">
+</p>
 
 
 App deployment/onboarding tool for macOS design for use Jamf School. School Assembly give's visual feedback to Admins or End User while installing applications on deployment of device. Admins no longer need to edit anything in the script for easier manipulation and ongoing maintenance
+
+<img width="576" src="https://github.com/cantscript/SchoolAssembly/blob/main/Images/School%20Assembly%20Window.png">
 
 ---
 
