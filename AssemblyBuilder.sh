@@ -12,14 +12,14 @@ showHelp(){
 	echo ""
 	echo "For detailed help visit the School Assembly Wiki - https://github.com/cantscript/SchoolAssembly/wiki"
 	echo ""
-	echo "-v | --ver"
+	echo "-v | -ver"
 	echo "Version: Required"
 	echo "-----------------"
 	echo "There must be a version number supplied when building a SchoolAssembly Package"
 	echo "e.g. 1.0.1"
 	echo ""
 	echo ""
-	echo "-i | --icons"
+	echo "-i | -icons"
 	echo "Source Icons: Optional"
 	echo "----------------------"
 	echo "Use this option to package any icons that that are required to be on the machine"
@@ -28,7 +28,7 @@ showHelp(){
 	echo "e.g. /users/myuser/Documents/My\ Icons"
 	echo ""
 	echo ""
-	echo "-r | --run"
+	echo "-r | -run"
 	echo "Run School Assembly Script after package installation: Optional"
 	echo "---------------------------------------------------------------"
 	echo "Use this option if you wish to invoke the School Assembly script after installation"
@@ -46,7 +46,7 @@ while [ $# -gt 0 ]; do
 		--icons | -i) sourceIcons=$2 ; shift  ;;
 		--run | -r ) runAfterInstall=1  ;;
 		--help | -h ) showHelp  ;;
-		(*)	
+		(*)
 	esac
 	shift
 done
@@ -89,15 +89,11 @@ currentUser="$(stat -f "%Su" /dev/console | cut -d '.' -f1)"
 
 ### Funcations  ###
 downloadAssemblyScript(){
-	if ! curl -L --silent --fail "https://raw.githubusercontent.com/cantscript/SchoolAssembly/main/SchoolAssembly.sh" >> $assemblyScript; then
-		echo "could not download School Assembly Script"
-	fi
+	curl -L --silent --fail "https://raw.githubusercontent.com/cantscript/SchoolAssembly/main/SchoolAssembly.sh" >> $assemblyScript
 }
 
 downloadInstallomatorScript(){
-	if ! curl -L --silent --fail "https://raw.githubusercontent.com/Installomator/Installomator/main/Installomator.sh" >> $installomatorScript; then
-		echo "could not download Installomator Script"
-	fi
+	curl -L --silent --fail "https://raw.githubusercontent.com/Installomator/Installomator/main/Installomator.sh" >> $installomatorScript
 	
 	sed -i -e 's/DEBUG=1/DEBUG=0/g' $installomatorScript
 }
@@ -115,12 +111,17 @@ buildPkgFolder(){
 	mkdir $buildFolder/scripts
 }
 
-packageCreation(){
+componentPackage(){
 	pkgbuild --root "${buildFolder}/payload" \
 	--identifier "${identifier}" \
 	--version "${version}" \
 	--scripts "${buildFolder}/scripts" \
 	--install-location "${install_location}" \
+	"$tmpDir/${pkgName}-${version}.pkg"
+}
+			
+convertToDistribution(){
+	productbuild --package "$tmpDir/${pkgName}-${version}.pkg" \
 	"/Users/$currentUser/Desktop/${pkgName}-${version}.pkg"
 }
 			
@@ -163,7 +164,8 @@ if [[ $runAfterInstall == 1 ]]; then
 	addPostScript 
 fi
 		
-packageCreation
+componentPackage 
+convertToDistribution
 
 ### Clean Up ###
 rm -R $tmpDir
