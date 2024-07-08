@@ -89,12 +89,17 @@ currentUser="$(stat -f "%Su" /dev/console | cut -d '.' -f1)"
 
 ### Funcations  ###
 downloadAssemblyScript(){
-	curl -L --silent --fail "https://raw.githubusercontent.com/cantscript/SchoolAssembly/main/SchoolAssembly.sh" >> $assemblyScript
+	if ! curl -L --silent --fail "https://raw.githubusercontent.com/cantscript/SchoolAssembly/main/SchoolAssembly.sh" >> $assemblyScript; then
+		echo "could not download School Assembly Script"
+	fi
 }
 
 downloadInstallomatorScript(){
-	curl -L --silent --fail "https://raw.githubusercontent.com/Installomator/Installomator/main/Installomator.sh" >> $installomatorScript
+	if ! curl -L --silent --fail "https://raw.githubusercontent.com/Installomator/Installomator/main/Installomator.sh" >> $installomatorScript; then
+		echo "could not download Installomator Script"
+	fi
 	
+	###Set Debug Mode in Installomator to 0 (Production) 
 	sed -i -e 's/DEBUG=1/DEBUG=0/g' $installomatorScript
 }
 
