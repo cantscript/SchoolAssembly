@@ -345,6 +345,22 @@ echo "" >> $jsOnboarderLog
 caffeinatepid=$!
 
 
+####Check Access to GitHub for Main Window Icon####
+iconURL="https://github.com/cantscript/SchoolAssembly/blob/main/Images/SchoolAssemblyIcon.png" # web page to be loaded
+tempCurl="/Users/Shared/.tempCurlFile" # temp file to store stdout
+accessIcon=$(curl --max-time 5 --silent --write-out %{response_code} --output "$tempCurl" "$iconURL")
+	
+#echo "HTTP CODE: "$AccessIcon
+rm $tempCurl
+	
+mainWindowIcon="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Sync.icns"
+	
+if [  $accessIcon == 200 ]; then
+		mainWindowIcon="https://github.com/cantscript/SchoolAssembly/blob/main/Images/SchoolAssemblyIcon.png?raw=true"
+fi
+	
+echo "The Main Window icon will be: "$mainWindowIcon"" >> $jsOnboarderLog
+
 ################################################################################
 #                                                                              #
 #                   Start swiftDialog & Installomator Process                  #
@@ -378,11 +394,11 @@ echo "" >> $jsOnboarderLog
 
 ####swiftDialog Start Window Functions####
 main_window_local(){
-	$dialogPath --title "$dialogTitle" --message "$dialogMessage" --alignment "center" --progress "$totalSteps" --button1text "Please Wait" --button1disabled --width "60%" --height "60%" --position "centre" --icon "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Sync.icns" --listitem Onboarding\ Starting.... 
+	$dialogPath --title "$dialogTitle" --message "$dialogMessage" --alignment "center" --progress "$totalSteps" --button1text "Please Wait" --button1disabled --width "60%" --height "60%" --position "centre" --icon "$mainWindowIcon" --listitem Onboarding\ Starting.... 
 }
 
 main_window(){
-	$dialogPath --title "$dialogTitle" --message "$dialogMessage" --alignment "center" --progress "$totalSteps" --button1text "Please Wait" --button1disabled --width "60%" --height "60%" --position "centre" --icon "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Sync.icns" --blurscreen --listitem Onboarding\ Starting.... 
+	$dialogPath --title "$dialogTitle" --message "$dialogMessage" --alignment "center" --progress "$totalSteps" --button1text "Please Wait" --button1disabled --width "60%" --height "60%" --position "centre" --icon "$mainWindowIcon" --blurscreen --listitem Onboarding\ Starting.... 
 }
 
 ####Start swiftDialog Window depending on local or script####
