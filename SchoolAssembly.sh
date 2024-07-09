@@ -3,7 +3,7 @@
 
 ################################################################################
 #                                                                              #
-#                            School Assembly: V2.1.0                           #
+#                            School Assembly: V2.1.1                           #
 #                                                                              #
 #  This script has been heavily inspired by "Progress 1st swiftDialog.sh" &    #
 #  "Installomator 1st Auto-install DEPNotify.sh" by                            #
@@ -350,7 +350,6 @@ iconURL="https://github.com/cantscript/SchoolAssembly/blob/main/Images/SchoolAss
 tempCurl="/Users/Shared/.tempCurlFile" # temp file to store stdout
 accessIcon=$(curl --max-time 5 --silent --write-out %{response_code} --output "$tempCurl" "$iconURL")
 	
-#echo "HTTP CODE: "$AccessIcon
 rm $tempCurl
 	
 mainWindowIcon="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Sync.icns"
