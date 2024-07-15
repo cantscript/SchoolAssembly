@@ -85,9 +85,10 @@ assemblyLoc=/payload/Library/Application\ Support/SchoolAssembly
 iconDestination=/payload/Library/Application\ Support/SchoolAssembly
 
 ### Current Logged In User ###
-currentUser="$(stat -f "%Su" /dev/console | cut -d '.' -f1)"
+#currentUser="$(stat -f "%Su" /dev/console | cut -d '.' -f1)"
+currentUser="$(stat -f "%Su" /dev/console)"
 
-### Funcations  ###
+### Functions  ###
 downloadAssemblyScript(){
 	if ! curl -L --silent --fail "https://raw.githubusercontent.com/cantscript/SchoolAssembly/main/SchoolAssembly.sh" >> $assemblyScript; then
 		echo "could not download School Assembly Script"
