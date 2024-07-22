@@ -1,5 +1,19 @@
 #!/bin/bash
 
+##################################################################################
+#                                                                                #
+#                                    LICENCE                                     #
+#                                                                                #
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR    #
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,      #
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE   #
+#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, #
+#  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE #
+#  SOFTWARE.                                                                     #
+#                                                                                #
+##################################################################################
+
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 ### Passed In Arguments ##
@@ -37,6 +51,16 @@ showHelp(){
 	echo "School Assembly via Jamf School"
 	echo ""
 	echo ""
+	echo "-s | --sign"
+	echo "Sign Package: Optional"
+	echo "-----------------------"
+	echo "Use this option if you wish to sign the resulting .pkg with your developer ID. This"
+	echo "is not required to deploy with Jamf School, as Jamf School will sign any deployed"
+	echo "pkg with a cert enrolled devices trust. Use this option if you intend to deploy the"
+	echo "resulting pkg manually."
+	echo ""
+	echo ""
+
 	exit
 }
 
@@ -44,6 +68,7 @@ while [ $# -gt 0 ]; do
 	case $1 in
 		--ver | -v)  verNo=$2 ; shift  ;;
 		--icons | -i) sourceIcons=$2 ; shift  ;;
+		--sign | -s ) signId=$2 ; shift ;;
 		--run | -r ) runAfterInstall=1  ;;
 		--help | -h ) showHelp  ;;
 		(*)
@@ -73,7 +98,7 @@ install_location="/"
 
 
 ### Temp Working Folder ###
-tmpDir=/Users/Shared/assemblyPkgBuilder
+tmpDir=/tmp/assemblyPkgBuilder
 
 ### Download Locations ###
 installomatorScript="$tmpDir/Installomator.sh"
@@ -81,7 +106,7 @@ assemblyScript="$tmpDir/SchoolAssembly.sh"
 
 ### Installed Locations ###
 installomatorLoc=/payload/usr/local/Installomator
-assemblyLoc=/payload/Library/Application\ Support/SchoolAssembly
+assemblyLoc=/payload/usr/local/SchoolAssembly
 iconDestination=/payload/Library/Application\ Support/SchoolAssembly
 
 ### Current Logged In User ###
@@ -126,12 +151,33 @@ componentPackage(){
 	"$tmpDir/${pkgName}-${version}.pkg"
 }
 			
+componentPackageSigned(){
+	pkgbuild --root "${buildFolder}/payload" \
+	--identifier "${identifier}" \
+	--version "${version}" \
+	--scripts "${buildFolder}/scripts" \
+	--install-location "${install_location}" \
+	--sign ${signId} \
+	"$tmpDir/${pkgName}-${version}.pkg"
+}
+			
 convertToDistribution(){
-	productbuild --package "$tmpDir/${pkgName}-${version}.pkg" \
+	productbuild --identifier "${identifier}" \
+	--version "${version}" \
+	--package "$tmpDir/${pkgName}-${version}.pkg" \
+	"/Users/$currentUser/Desktop/${pkgName}-${version}.pkg"
+}
+			
+convertToDistributionSigned(){
+	productbuild --identifier "${identifier}" \
+	--version "${version}" \
+	--package "$tmpDir/${pkgName}-${version}.pkg" \
+	--sign ${signId} \
 	"/Users/$currentUser/Desktop/${pkgName}-${version}.pkg"
 }
 			
 copyIcons(){
+	mkdir -p $buildFolder"$iconDestination"
 	for file in "$sourceIcons"/* ; do
 		iconName=$(basename "$file")
 		cp "$file" $buildFolder"$iconDestination"/$iconName
@@ -143,7 +189,7 @@ addPostScript(){
 	cat <<EOF >$postScript
 #!/bin/bash
 
-/Library/Application\ Support/SchoolAssembly/SchoolAssembly.sh
+/usr/local/SchoolAssembly/SchoolAssembly.sh
 
 EOF
 	
@@ -169,9 +215,18 @@ fi
 if [[ $runAfterInstall == 1 ]]; then
 	addPostScript 
 fi
-		
-componentPackage 
-convertToDistribution
+	
+if  [[ ! -n $signId ]] ;then 
+	componentPackage 
+	convertToDistribution
+	echo "Creating unsigned Pkg"
+elif [[ -n $signId ]] ;then
+	componentPackageSigned 
+	convertToDistributionSigned
+	echo "Creating signed Pkg"
+else
+	echo "There was an error"
+fi
 
 ### Clean Up ###
-rm -R $tmpDir
+# rm -R $tmpDir
