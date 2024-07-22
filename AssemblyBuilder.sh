@@ -1,5 +1,19 @@
 #!/bin/bash
 
+##################################################################################
+#                                                                                #
+#                                    LICENCE                                     #
+#                                                                                #
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR    #
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,      #
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE   #
+#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, #
+#  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE #
+#  SOFTWARE.                                                                     #
+#                                                                                #
+##################################################################################
+
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 ### Passed In Arguments ##
@@ -84,7 +98,7 @@ install_location="/"
 
 
 ### Temp Working Folder ###
-tmpDir=/Users/Shared/assemblyPkgBuilder
+tmpDir=/tmp/assemblyPkgBuilder
 
 ### Download Locations ###
 installomatorScript="$tmpDir/Installomator.sh"
@@ -92,7 +106,7 @@ assemblyScript="$tmpDir/SchoolAssembly.sh"
 
 ### Installed Locations ###
 installomatorLoc=/payload/usr/local/Installomator
-assemblyLoc=/payload/Library/Application\ Support/SchoolAssembly
+assemblyLoc=/payload/usr/local/SchoolAssembly
 iconDestination=/payload/Library/Application\ Support/SchoolAssembly
 
 ### Current Logged In User ###
@@ -163,6 +177,7 @@ convertToDistributionSigned(){
 }
 			
 copyIcons(){
+	mkdir -p $buildFolder"$iconDestination"
 	for file in "$sourceIcons"/* ; do
 		iconName=$(basename "$file")
 		cp "$file" $buildFolder"$iconDestination"/$iconName
@@ -174,7 +189,7 @@ addPostScript(){
 	cat <<EOF >$postScript
 #!/bin/bash
 
-/Library/Application\ Support/SchoolAssembly/SchoolAssembly.sh
+/usr/local/SchoolAssembly/SchoolAssembly.sh
 
 EOF
 	
@@ -214,4 +229,4 @@ else
 fi
 
 ### Clean Up ###
-rm -R $tmpDir
+# rm -R $tmpDir
