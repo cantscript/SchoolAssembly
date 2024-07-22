@@ -1,6 +1,12 @@
-## School Assembly: V2.1                  
+## School Assembly: V3.0                  
 
-**Renamed Project: Same tool, new name!**
+**New for Version 3.0 - Assembly Builder** <br>
+Reduce School Assembly deployment complexity by creating a single package with all resources rather than following many steps
+
+
+Assembly Builder is a script that accepts a number of build options and results in a _**single package**_ which includes the School Assembly tool, installomator and optionally any icons required. 
+
+---
 
 <p align="center">
 <img width="256" alt="mac1024" src="https://github.com/cantscript/SchoolAssembly/blob/main/Images/SchoolAssemblyIcon.png">
@@ -23,13 +29,10 @@ Installomator must be installed on the target device(s) prior to running.
 swiftDialog will be installed via Installomator in script logic, if not already installed.
 
 Use one of the following to deliver Installomator to target device(s) with Jamf School <br>
-1) By scripting installation before running School Assembly Tool                <br>
-2) Deploying via a package and then running School Assembly Tool
+1) RECOMMENDED (V3.0+) Use Assembly Builder and deploy to devices <br>
+2) By scripting installation before running School Assembly Tool                <br>
+3) Deploying via a package and then running School Assembly Tool
 
-
-
-_**New for V2.1: App Icons**_ <br>
-App Icons can now be pulled from the internet instead of / as well as local file paths. This means, that depending on your setup, there is no longer a dependancy on app icons referenced in a configuration profile to be on the device.
 
 See **[Wiki](https://github.com/darlow86/JSmacOS-Onboarder/wiki)** for more information
 
@@ -42,7 +45,7 @@ To use the School Assembly tool follow the steps below
 * Package any icon images and deploy to the target device(s) via Jamf School prior to using the tool
 * Create a configuration profile to control the School Assembly tool, there is an [Example Configuration Profile](https://github.com/cantscript/SchoolAssembly/blob/main/plist%20example/com.cantscript.schoolassembly.plist) available
 * Upload the configuration profile into Jamf School and deploy to target device(s)
-* Copy the [School Assembly script](https://github.com/cantscript/SchoolAssembly/blob/main/SchoolAssembly.sh) into Jamf School
+* Build School Assembly Package using Assembly Builder
 * Scope and deploy to target device(s)
 * School Assembly tool will run on target device(s), installing swiftDialog if required
 
