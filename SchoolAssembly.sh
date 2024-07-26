@@ -16,7 +16,7 @@
 
 ################################################################################
 #                                                                              #
-#                            School Assembly: V2.1.1                           #
+#                            School Assembly: V2.2                             #
 #                                                                              #
 #  This script has been heavily inspired by "Progress 1st swiftDialog.sh" &    #
 #  "Installomator 1st Auto-install DEPNotify.sh" by                            #
@@ -364,9 +364,13 @@ accessIcon=$(curl --max-time 5 --silent --write-out %{response_code} --output "$
 rm $tempCurl
 	
 mainWindowIcon="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Sync.icns"
+masWindowIcon="/System/Applications/App Store.app/Contents/Resources/AppIcon.icns"
 	
 if [  $accessIcon == 200 ]; then
 		mainWindowIcon="https://github.com/cantscript/SchoolAssembly/blob/main/Images/SchoolAssemblyIcon.png?raw=true"
+		mainOverlayIcon="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Sync.icns"
+		masWindowIcon="https://github.com/cantscript/SchoolAssembly/blob/main/Images/SchoolAssemblyIcon.png?raw=true"
+		masOverlayIcon="/System/Applications/App Store.app/Contents/Resources/AppIcon.icns"
 fi
 	
 echo "The Main Window icon will be: "$mainWindowIcon"" >> $jsOnboarderLog
@@ -404,11 +408,34 @@ echo "" >> $jsOnboarderLog
 
 ####swiftDialog Start Window Functions####
 main_window_local(){
-	$dialogPath --title "$dialogTitle" --message "$dialogMessage" --alignment "center" --progress "$totalSteps" --button1text "Please Wait" --button1disabled --width "60%" --height "60%" --position "centre" --icon "$mainWindowIcon" --listitem Onboarding\ Starting.... 
+	$dialogPath --title "$dialogTitle" \
+	--message "$dialogMessage" \
+	--alignment "center" \
+	--progress "$totalSteps" \
+	--button1text "Please Wait" \
+	--button1disabled \
+	--width "60%" \
+	--height "60%" \
+	--position "centre" \
+	--icon "$mainWindowIcon" \
+	--overlayicon "$mainOverlayIcon" \
+	--listitem Onboarding\ Starting.... 
 }
-
+	
 main_window(){
-	$dialogPath --title "$dialogTitle" --message "$dialogMessage" --alignment "center" --progress "$totalSteps" --button1text "Please Wait" --button1disabled --width "60%" --height "60%" --position "centre" --icon "$mainWindowIcon" --blurscreen --listitem Onboarding\ Starting.... 
+	$dialogPath --title "$dialogTitle" \
+	--message "$dialogMessage" \
+	--alignment "center" \
+	--progress "$totalSteps" \
+	--button1text "Please Wait" \
+	--button1disabled \
+	--width "60%" \
+	--height "60%" \
+	--position "centre" \
+	--icon "$mainWindowIcon" \
+	--overlayicon "$mainOverlayIcon" \
+	--blurscreen \
+	--listitem Onboarding\ Starting.... 
 }
 
 ####Start swiftDialog Window depending on local or script####
@@ -492,7 +519,8 @@ echo "" >> $jsOnboarderLog
 
 ####Start Mac App Store Checks####
 echo "progresstext: Checking Mac App Store Installations..." >>$cmdLog
-echo "icon: /System/Applications/App Store.app/Contents/Resources/AppIcon.icns" >>$cmdLog
+echo "icon: "$masWindowIcon"" >>$cmdLog
+echo "overlayicon: "$masOverlayIcon"" >>$cmdLog
 
 
 for masApp in "${storeInstalls[@]}"; do
