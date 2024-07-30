@@ -229,4 +229,4 @@ else
 fi
 
 ### Clean Up ###
-# rm -R $tmpDir
+ rm -R $tmpDir
