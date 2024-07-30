@@ -16,7 +16,7 @@
 
 ################################################################################
 #                                                                              #
-#                            School Assembly: V2.2                             #
+#                            School Assembly: V3.0                             #
 #                                                                              #
 #  This script has been heavily inspired by "Progress 1st swiftDialog.sh" &    #
 #  "Installomator 1st Auto-install DEPNotify.sh" by                            #
@@ -24,7 +24,7 @@
 #  https://github.com/Theile                                                   #
 #                                                                              #
 #  Script by Anthony Darlow - April 2024.                                      #
-#  Version Edit - June 2024                                                    #
+#  Version Edit - July 2024                                                    #
 #                                                                              #
 ################################################################################
 

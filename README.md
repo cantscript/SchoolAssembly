@@ -7,6 +7,8 @@ Reduce School Assembly deployment complexity by creating a single package with a
 
 Assembly Builder is a script that accepts a number of build options and results in a _**single package**_ which includes the School Assembly tool, installomator and optionally any icons required. 
 
+**NOTE** Its recommended the when using Assembly Builder you use the New Deployment Workflow Wiki page
+
 ---
 
 <p align="center">
